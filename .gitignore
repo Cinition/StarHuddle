@@ -27,6 +27,14 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
+
+# visual studio
+.vs/
+*.sln
+
+# Star Huddle
+bin/
+build/
+dependencies/
