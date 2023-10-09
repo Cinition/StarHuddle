@@ -7,15 +7,14 @@ class FilterBar
 
 public:
 
-	FilterBar( Vector2& _cursor_pos );
+	FilterBar( void );
 
 	void update();
-	void render();
+	void render( Vector2& _cursor_position );
 
 private:
 
 	static void addFile( void );
 
 	Button m_add_file_button;
-
 };

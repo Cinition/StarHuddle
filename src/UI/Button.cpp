@@ -1,10 +1,11 @@
 #include "Button.h"
 
-Button::Button( Vector2 _position, Vector2 _size, callback_function _func )
-: m_position( _position )
-, m_size( _size )
-, m_callback( _func )
+Button::Button( callback_function _func )
+: m_callback( _func )
 {
+	m_normal_color = Color( 34, 189, 106, 255 );
+	m_hover_color = Color( 40, 227, 127, 255 );
+	m_selected_color = Color( 24, 138, 77, 255 );
 }
 
 void Button::tick(void)
@@ -18,12 +19,16 @@ void Button::tick(void)
 	if( IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
 	{
 		m_pressed = is_cursor_inside;
-		m_callback();
+		if( m_pressed )
+			m_callback();
 	}
 }
 
-void Button::draw(void)
+void Button::draw( Vector2& _cursor_position, Vector2 _size )
 {
+	m_position = _cursor_position;
+	m_size = _size;
+
 	auto bg_color = m_normal_color;
 
 	if( m_pressed )      bg_color = m_selected_color;
@@ -34,8 +39,7 @@ void Button::draw(void)
 	rectangle.y = m_position.y;
 	rectangle.width = m_size.x;
 	rectangle.height = m_size.y;
-
-	DrawRectangleRounded( rectangle, 5.f, 5, bg_color );
+	DrawRectangleRounded( rectangle, 0.75f, 11, bg_color );
 }
 
 void Button::checkIfButtonPressed(Vector2 _cursor_position)
@@ -44,7 +48,6 @@ void Button::checkIfButtonPressed(Vector2 _cursor_position)
 		return;
 
 	m_pressed = isCursorInside( _cursor_position );
-
 }
 
 bool Button::isCursorInside( Vector2 _cursor_position )

@@ -1,9 +1,8 @@
 #include "FilterBar.h"
 
-FilterBar::FilterBar( Vector2& _cursor_pos )
+FilterBar::FilterBar( void )
 {
-	m_add_file_button = Button( _cursor_pos, Vector2( 80, 20 ), FilterBar::addFile );
-	_cursor_pos = Vector2(_cursor_pos.x, _cursor_pos.y + 20.f + 15.f);
+	m_add_file_button = Button( FilterBar::addFile );
 }
 
 void FilterBar::update()
@@ -11,12 +10,12 @@ void FilterBar::update()
 	m_add_file_button.tick();
 }
 
-void FilterBar::render()
+void FilterBar::render( Vector2& _cursor_position )
 {
-	m_add_file_button.draw();
+	m_add_file_button.draw( _cursor_position, { 150, 50 } );
 }
 
 void FilterBar::addFile( void )
 {
-	
+	return;
 }
