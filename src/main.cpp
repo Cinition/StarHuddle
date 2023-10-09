@@ -22,12 +22,10 @@ int WinMain(void)
 		ClearBackground( Color( 46, 46, 46, 255 ) );
 
 		Vector2 cursor_pos = Vector2( 15.f, 15.f );
-
 		filter_bar.render( cursor_pos );
 
 		// Reset cursor
 		cursor_pos = Vector2( 180.f, 15.f );
-
 		asset_grid.render( cursor_pos );
 
 		EndDrawing();
