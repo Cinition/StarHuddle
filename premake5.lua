@@ -45,6 +45,7 @@ workspace "StarHuddle"
         }
 
         includedirs {
+            "src/",
             -- RayLib
             "dependencies/raylib/include",
         }
