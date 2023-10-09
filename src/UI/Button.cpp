@@ -1,11 +1,8 @@
 #include "Button.h"
 
-Button::Button( Vector2 _position, Vector2 _size, Color _bg_color, Color _hover_color, Color _selected_color, callback_function _func )
+Button::Button( Vector2 _position, Vector2 _size, callback_function _func )
 : m_position( _position )
 , m_size( _size )
-, m_normal_color( _bg_color )
-, m_hover_color( _hover_color )
-, m_selected_color( _selected_color )
 , m_callback( _func )
 {
 }

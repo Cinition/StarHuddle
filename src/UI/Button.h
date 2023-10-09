@@ -8,7 +8,8 @@ public:
 
 	typedef void ( *callback_function )( void );
 
-	Button( Vector2 _position, Vector2 _size, Color _bg_color, Color _hover_color, Color _selected_color, callback_function _func );
+	Button( void ) = default;
+	Button( Vector2 _position, Vector2 _size, callback_function _func );
 
 	void tick( void );
 	void draw( void );
