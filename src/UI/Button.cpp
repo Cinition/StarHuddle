@@ -40,6 +40,7 @@ void Button::draw( Vector2& _cursor_position, Vector2 _size )
 	rectangle.width = m_size.x;
 	rectangle.height = m_size.y;
 	DrawRectangleRounded( rectangle, 0.75f, 11, bg_color );
+	_cursor_position.y += m_size.y + 20.f;
 }
 
 void Button::checkIfButtonPressed(Vector2 _cursor_position)
