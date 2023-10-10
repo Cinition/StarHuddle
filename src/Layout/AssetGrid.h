@@ -1,21 +1,21 @@
 #pragma once
 
+#include "UI/UIElement.h"
+
 #include "raylib.h"
 
-class AssetGrid
+class AssetGrid : public UIElement
 {
 
 public:
 
-	AssetGrid( void );
-
-	void update();
-	void render( Vector2& _cursor_position );
+	AssetGrid( void ) = default;
+	AssetGrid( Vector2& _cursor_position, Vector2 _size );
 
 private:
 
-	void drawBG( Vector2 _cursor_position );
-	void drawAsset( Vector2& _cursor_position );
+	virtual void drawChildren( void ) override;
+	void drawAsset( Vector2& _cursor_position, Vector2 _cutoff );
 
-	Color m_bg_color;
+	float m_scroll_offset = 0.0f;
 };

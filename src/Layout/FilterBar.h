@@ -1,24 +1,25 @@
 #pragma once
 
 #include "UI/Button.h"
+#include "UI/UIElement.h"
+#include "UI/FilterElement.h"
+#include "UI/GroupElement.h"
 
 class FilterBar
 {
-
 public:
 
-	FilterBar( void );
+	FilterBar( Vector2& _cursor_position, Vector2 _size );
 
 	void update();
-	void render( Vector2& _cursor_position );
+	void draw( void );
 
 private:
 
 	static void addFile( void );
 
-	void drawFilters( Vector2& _cursor_position );
-	void drawGroups( Vector2& _cursor_position );
-
 	Button m_add_file_button;
-	Color m_bg_color;
+	FilterElement m_filters;
+	GroupElement m_groups;
+
 };

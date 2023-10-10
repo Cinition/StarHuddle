@@ -1,11 +1,14 @@
 #include "Button.h"
 
-Button::Button( callback_function _func )
-: m_callback( _func )
+Button::Button( Vector2& _cursor_position, Vector2 _size, callback_function _func )
+: m_position( _cursor_position )
+, m_size( _size )
+, m_callback( _func )
+, m_normal_color( Color( 34, 189, 106, 255 ) )
+, m_hover_color( Color( 40, 227, 127, 255 ) )
+, m_selected_color( Color( 24, 138, 77, 255 ) )
 {
-	m_normal_color = Color( 34, 189, 106, 255 );
-	m_hover_color = Color( 40, 227, 127, 255 );
-	m_selected_color = Color( 24, 138, 77, 255 );
+	_cursor_position.y += _size.y;
 }
 
 void Button::tick(void)
@@ -24,11 +27,8 @@ void Button::tick(void)
 	}
 }
 
-void Button::draw( Vector2& _cursor_position, Vector2 _size )
+void Button::draw( void )
 {
-	m_position = _cursor_position;
-	m_size = _size;
-
 	auto bg_color = m_normal_color;
 
 	if( m_pressed )      bg_color = m_selected_color;
@@ -39,8 +39,8 @@ void Button::draw( Vector2& _cursor_position, Vector2 _size )
 	rectangle.y = m_position.y;
 	rectangle.width = m_size.x;
 	rectangle.height = m_size.y;
+
 	DrawRectangleRounded( rectangle, 0.75f, 11, bg_color );
-	_cursor_position.y += m_size.y + 20.f;
 }
 
 void Button::checkIfButtonPressed(Vector2 _cursor_position)
