@@ -21,8 +21,8 @@ private:
 	void updateScrolling( float& _scroll_offset );
 	void calculateGridSize( int _asset_count, Vector2 _asset_size );
 
-	Vector2 m_frame_size = Vector2( 0.f, 0.f );
-	Vector2 m_asset_grid_size = Vector2( 0.f, 0.f );
-	int m_temp_asset_count = 70;
-	float m_scroll_offset = 0.0f;
+	Vector2 m_frame_size       = Vector2( 0.f, 0.f );
+	Vector2 m_asset_grid_size  = Vector2( 0.f, 0.f );
+	int     m_temp_asset_count = 70;
+	float   m_scroll_offset    = 0.0f;
 };

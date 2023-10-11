@@ -1,17 +1,11 @@
 #pragma once
 
-#include "UI/AssetGrid.h"
-
-class MainScreen
+class BucketBar
 {
 
 public:
 
-	void update() {};
-	void render() {};
-
-private:
-
-	AssetGrid m_asset_grid;
+	void update( void ) {};
+	void render( void ) {};
 
 };

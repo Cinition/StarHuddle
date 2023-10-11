@@ -15,5 +15,5 @@ public:
 
 private:
 
-	virtual void drawChildren( void ) override;
+	virtual void drawChildren( Vector2 _cursor_position ) override;
 };

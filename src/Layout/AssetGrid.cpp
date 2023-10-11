@@ -2,9 +2,9 @@
 
 #include "UI/Style.h"
 
-constexpr int FRAME_ROW_COUNT = 10;
+constexpr int   FRAME_ROW_COUNT    = 10;
 constexpr float FRAME_ASPECT_RATIO = 1.5f;
-constexpr float SCROLL_MULTIPLIER = 20.f;
+constexpr float SCROLL_MULTIPLIER  = 20.f;
 
 AssetGrid::AssetGrid( Vector2& _cursor_position, Vector2 _size )
 : UIElement( _cursor_position, _size )
@@ -12,7 +12,7 @@ AssetGrid::AssetGrid( Vector2& _cursor_position, Vector2 _size )
 	m_roundness = 0.05f;
 
 	auto frame_width = ( _size.x - UI::MARGIN) / FRAME_ROW_COUNT - UI::MARGIN;
-	m_frame_size = Vector2( frame_width, frame_width * FRAME_ASPECT_RATIO );
+	m_frame_size     = Vector2( frame_width, frame_width * FRAME_ASPECT_RATIO );
 }
 
 void AssetGrid::update(void)
@@ -48,17 +48,17 @@ void AssetGrid::drawAsset( Vector2& _cursor_position, Vector2 _cutoff )
 void AssetGrid::updateScrolling( float& _scroll_offset )
 {
 	auto scroll_delta = GetMouseWheelMove() * SCROLL_MULTIPLIER;
-	if( scroll_delta > 0.f && -(_scroll_offset + scroll_delta ) <= 0.f )
+	if( scroll_delta > 0.f && -( _scroll_offset + scroll_delta ) <= 0.f )
 	{
-		_scroll_offset = 0.f;
+		_scroll_offset = 0.f; // Push scroll to complete top
 		return; // Don't scroll when at top
 	}
 
-	auto inner_height = m_size.y - ( UI::MARGIN * 2 );
+	auto inner_height    = m_size.y - ( UI::MARGIN * 2 );
 	auto scroll_distance = m_asset_grid_size.y - inner_height;
 	if( scroll_delta < 0.f && -( _scroll_offset + scroll_delta ) >= scroll_distance )
 	{
-		_scroll_offset = -scroll_distance;
+		_scroll_offset = -scroll_distance; // Push scroll to complete bottom
 		return; // Don't scroll when at bottom
 	}
 
@@ -67,9 +67,9 @@ void AssetGrid::updateScrolling( float& _scroll_offset )
 
 void AssetGrid::calculateGridSize( int _asset_count, Vector2 _frame_size )
 {
-	float row_size = ( _frame_size.x * FRAME_ROW_COUNT ) + ( UI::MARGIN * ( FRAME_ROW_COUNT - 1 ) );
+	float row_size     = ( _frame_size.x * FRAME_ROW_COUNT ) + ( UI::MARGIN * ( FRAME_ROW_COUNT - 1 ) );
 	float column_count = floor( _asset_count / FRAME_ROW_COUNT );
-	float column_size = ( _frame_size.y * column_count ) + ( UI::MARGIN * ( column_count - 1 ) );
+	float column_size  = ( _frame_size.y * column_count ) + ( UI::MARGIN * ( column_count - 1 ) );
 
 	m_asset_grid_size = Vector2( row_size, column_size );
 }
