@@ -19,9 +19,9 @@ void UIElement::draw( void )
 	rect.width = m_size.x;
 	rect.height = m_size.y;
 
-	float pixel_percentage = m_roundness / m_size.y;
+	float pixel_percentage = m_roundness / std::min( m_size.x, m_size.y );
 
-	DrawRectangleRounded( rect, pixel_percentage / 0.25f, 11, UI::ELEMENT_BG_COLOR);
+	DrawRectangleRounded( rect, pixel_percentage, 11, UI::ELEMENT_BG_COLOR);
 
 	if( m_use_inner_margin )
 	{

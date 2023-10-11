@@ -21,6 +21,6 @@ protected:
 	Vector2 m_position;
 	Vector2 m_size;
 	Vector2 m_inner_size;
-	float   m_roundness        = 10.f;
+	float   m_roundness        = 20.f;
 	bool    m_use_inner_margin = true;
 };
