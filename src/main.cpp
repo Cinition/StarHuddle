@@ -22,7 +22,7 @@ int WinMain(void)
 	{
 		// Update pass
 		filter_bar.update();
-		//asset_grid.update();
+		asset_grid.update();
 
 		// Render pass
 		BeginDrawing();
