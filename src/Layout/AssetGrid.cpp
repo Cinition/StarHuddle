@@ -68,6 +68,9 @@ void AssetGrid::drawAsset( Vector2& _cursor_position, Vector2 _cutoff )
 
 void AssetGrid::updateScrolling( float& _scroll_offset )
 {
+	if( m_asset_grid_size.y <= m_inner_size.y )
+		return; // Don't scroll with no overflow
+
 	auto scroll_delta = GetMouseWheelMove() * SCROLL_MULTIPLIER;
 	if( scroll_delta > 0.f && -( _scroll_offset + scroll_delta ) <= 0.f )
 	{

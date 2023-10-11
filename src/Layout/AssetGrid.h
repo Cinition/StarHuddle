@@ -25,6 +25,6 @@ private:
 	RenderTexture2D m_grid_render_target;
 	Vector2         m_frame_size       = Vector2( 0.f, 0.f );
 	Vector2         m_asset_grid_size  = Vector2( 0.f, 0.f );
-	int             m_temp_asset_count = 70;
+	int             m_temp_asset_count = 5;
 	float           m_scroll_offset    = 0.0f;
 };
