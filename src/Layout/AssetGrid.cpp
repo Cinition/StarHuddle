@@ -35,9 +35,10 @@ void AssetGrid::drawInner( Vector2 _cursor_position )
 		if( ( _cursor_position.y + m_frame_size.y ) < reset_position.y )
 			continue; // Don't render asset if its too high
 
-		if( _cursor_position.y > ( m_size.y ) )
+		if( _cursor_position.y > ( m_position.y + UI::MARGIN + m_inner_size.y ) )
 			continue; // Don't render asset if its too low
 
+		drawAsset( _cursor_position, Vector2( 0.f, 0.f ) );
 		_cursor_position.x += UI::MARGIN;
 	}
 }
