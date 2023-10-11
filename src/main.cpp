@@ -33,12 +33,15 @@ int WinMain(void)
 		asset_grid.update();
 		detail_bar.update();
 
+		// Specific render for overflow issue
+		asset_grid.drawAssetGrid();
+
 		// Render pass
 		BeginDrawing();
 		ClearBackground( UI::BACKGROUND_COLOR );
 
-		filter_bar.draw();
 		asset_grid.draw();
+		filter_bar.draw();
 		detail_bar.draw();
 
 		EndDrawing();

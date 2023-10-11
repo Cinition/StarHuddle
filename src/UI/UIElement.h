@@ -13,8 +13,7 @@ public:
 
 	void draw( void );
 
-	virtual void        drawInner( Vector2 _cursor_position ) = 0;
-	virtual std::string getTitle( void ) { return ""; }
+	virtual void drawInner( Vector2 _cursor_position ) = 0;
 
 protected:
 
