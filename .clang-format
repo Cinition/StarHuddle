@@ -1,0 +1,15 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlwaysBreakAfterDefinitionReturnType: false
+BreakConstructorInitializers: BeforeComma
+ColumnLimit: 149
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+EmptyLineAfterAccessModifier: Always
+SpaceBeforeParens: Never
+SpacesInAngles: true
+SpacesInConditionalStatement: true
+SpacesInParentheses: true
+...
