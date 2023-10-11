@@ -5,6 +5,6 @@ FilterElement::FilterElement( Vector2& _cursor_position, Vector2 _size )
 {
 }
 
-void FilterElement::drawChildren( Vector2 _cursor_position )
+void FilterElement::drawInner( Vector2 _cursor_positions )
 {
 }

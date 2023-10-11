@@ -16,7 +16,7 @@ public:
 
 private:
 
-	virtual void drawChildren( Vector2 _cursor_position ) override;
+	void drawInner( Vector2 _cursor_position ) override;
 	void drawAsset( Vector2& _cursor_position, Vector2 _cutoff );
 	void updateScrolling( float& _scroll_offset );
 	void calculateGridSize( int _asset_count, Vector2 _asset_size );

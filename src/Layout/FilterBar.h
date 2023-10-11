@@ -1,9 +1,7 @@
 #pragma once
 
-#include "UI/Button.h"
+#include "UI/SearchElement.h"
 #include "UI/FilterElement.h"
-#include "UI/GroupElement.h"
-#include "UI/UIElement.h"
 
 class FilterBar
 {
@@ -16,10 +14,7 @@ public:
 
 private:
 
-	static void addFile( void );
-
-	Button        m_add_file_button;
-	FilterElement m_filters;
-	GroupElement  m_groups;
+	SearchElement m_search;
+	FilterElement m_filter;
 
 };

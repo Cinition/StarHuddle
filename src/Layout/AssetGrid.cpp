@@ -2,15 +2,13 @@
 
 #include "UI/Style.h"
 
-constexpr int   FRAME_ROW_COUNT    = 10;
+constexpr int   FRAME_ROW_COUNT    = 9;
 constexpr float FRAME_ASPECT_RATIO = 1.5f;
 constexpr float SCROLL_MULTIPLIER  = 20.f;
 
 AssetGrid::AssetGrid( Vector2& _cursor_position, Vector2 _size )
 : UIElement( _cursor_position, _size )
 {
-	m_roundness = 0.05f;
-
 	auto frame_width = ( _size.x - UI::MARGIN) / FRAME_ROW_COUNT - UI::MARGIN;
 	m_frame_size     = Vector2( frame_width, frame_width * FRAME_ASPECT_RATIO );
 }
@@ -21,20 +19,25 @@ void AssetGrid::update(void)
 	updateScrolling( m_scroll_offset );
 }
 
-void AssetGrid::drawChildren( Vector2 _cursor_position )
+void AssetGrid::drawInner( Vector2 _cursor_position )
 {
-	float row_reset_position = _cursor_position.x;
+	Vector2 reset_position = _cursor_position;
 	_cursor_position.y += m_scroll_offset;
 
 	for( int i = 0; i < m_temp_asset_count; i++ )
 	{
 		if( i > 0 && i % FRAME_ROW_COUNT == 0 )
 		{
-			_cursor_position.x = row_reset_position;
+			_cursor_position.x = reset_position.x;
 			_cursor_position.y += m_frame_size.y + UI::MARGIN;
 		}
 
-		drawAsset( _cursor_position, Vector2( 0.f, 0.f ) );
+		if( ( _cursor_position.y + m_frame_size.y ) < reset_position.y )
+			continue; // Don't render asset if its too high
+
+		if( _cursor_position.y > ( m_size.y ) )
+			continue; // Don't render asset if its too low
+
 		_cursor_position.x += UI::MARGIN;
 	}
 }
