@@ -38,4 +38,4 @@
 # Star Huddle
 bin/
 build/
-dependencies/
+lib/

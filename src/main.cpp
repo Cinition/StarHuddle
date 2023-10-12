@@ -47,7 +47,7 @@ int WinMain(void)
 		EndDrawing();
 	}
 
-	CloseWindow();
+	RaylibCloseWindow();
 
 	return 0;
 }

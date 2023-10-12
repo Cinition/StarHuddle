@@ -2,8 +2,6 @@
 
 #include "raylib.h"
 
-#include <string>
-
 class UIElement
 {
 public:

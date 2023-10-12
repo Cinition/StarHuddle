@@ -2,6 +2,8 @@
 
 #include "UI/Style.h"
 
+#include "raymath.h"
+
 UIElement::UIElement( Vector2& _cursor_position, Vector2 _size )
 : m_position( _cursor_position )
 , m_size( _size )
@@ -19,7 +21,7 @@ void UIElement::draw( void )
 	rect.width = m_size.x;
 	rect.height = m_size.y;
 
-	float pixel_percentage = m_roundness / std::min( m_size.x, m_size.y );
+	float pixel_percentage = m_roundness / fmin( m_size.x, m_size.y );
 
 	DrawRectangleRounded( rect, pixel_percentage, 11, UI::ELEMENT_BG_COLOR);
 

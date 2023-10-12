@@ -2,6 +2,8 @@
 
 #include "UI/Style.h"
 
+#include "raymath.h"
+
 constexpr int   FRAME_ROW_COUNT    = 9;
 constexpr float FRAME_ASPECT_RATIO = 1.5f;
 constexpr float SCROLL_MULTIPLIER  = 20.f;

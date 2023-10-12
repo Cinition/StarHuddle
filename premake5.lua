@@ -2,10 +2,17 @@ cppdialect "C++20"
 language "C++"
 staticruntime "off"
 
+
+defines {
+    "_CRT_SECURE_NO_WARNINGS"
+}
+
+
 filter "configurations:Debug"
     runtime "Debug"
     symbols "on"
     defines { "DEBUG" }
+
 
 filter "configurations:Release"
     runtime "Release"
@@ -13,39 +20,59 @@ filter "configurations:Release"
     symbols "off"
     defines { "RELEASE" }
 
+
 workspace "StarHuddle"
     architecture "x86_64"
     configurations { "Debug","Release" }
     startproject "StarHuddle"
 
+
+    project "Raylib"
+        kind "StaticLib"
+        location ( "build" )
+        targetdir( "lib" )
+
+        files {
+            "dependencies/raylib/src/rcore.c",
+            "dependencies/raylib/src/utils.c",
+            "dependencies/raylib/src/rmodels.c",
+            "dependencies/raylib/src/rshapes.c",
+            "dependencies/raylib/src/rtext.c",
+            "dependencies/raylib/src/rtextures.c",
+            "dependencies/raylib/src/rglfw.c",
+        }
+
+        defines {
+            "GRAPHICS_API_OPENGL_33",
+            "PLATFORM_DESKTOP",
+        }
+
+        includedirs {
+            "dependencies/raylib/src/external/glfw/include",
+            "dependencies/raylib/src/external/glfw/deps/mingw",
+        }
+
+
     project "StarHuddle"
         kind "WindowedApp"
-        location ( "bin/starhuddle" )
-        targetdir( "build/starhuddle/%{cfg.buildcfg}" )
-        
+        location ( "build" )
+        targetdir( "bin" )
+
         files {
             "src/**.h",
             "src/**.cpp",
-            -- RayLib
-            "dependencies/raylib/include/**.h",
-        }
-
-        libdirs {
-            -- RayLib
-            "dependencies/raylib/lib",
         }
 
         links {
-            -- RayLib
-            "raylib",
-            "winmm",
+            "Raylib",
             "kernel32",
             "opengl32",
             "gdi32",
+            "winmm",
         }
 
         includedirs {
             "src/",
             -- RayLib
-            "dependencies/raylib/include",
+            "dependencies/raylib/src",
         }
