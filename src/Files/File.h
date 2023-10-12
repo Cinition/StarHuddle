@@ -11,10 +11,9 @@ public:
 
 	enum class Type
 	{
-		JSON = 1,
-		TGA = 2,
-		OGG = 3,
-		WAV = 4,
+		JSON = 0,
+		TGA = 1,
+		OGG = 2,
 	};
 
 	const auto& getName    ( void ) const { return m_name; }

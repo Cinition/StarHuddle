@@ -14,6 +14,10 @@ AssetGrid::AssetGrid( Vector2& _cursor_position, Vector2 _size )
 	m_grid_render_target = LoadRenderTexture( m_inner_size.x, m_inner_size.y );
 	auto frame_width     = ( _size.x - UI::MARGIN ) / FRAME_ROW_COUNT - UI::MARGIN;
 	m_frame_size         = Vector2( frame_width, frame_width * FRAME_ASPECT_RATIO );
+
+	m_json_texture       = LoadTexture( "../data/textures/JSON.png" );
+	m_tga_texture        = LoadTexture( "../data/textures/TGA.png" );
+	m_ogg_texture        = LoadTexture( "../data/textures/OGG.png" );
 }
 
 void AssetGrid::update(void)
@@ -45,7 +49,7 @@ void AssetGrid::drawAssetGrid( void )
 		if( cursor_position.y > ( m_position.y + UI::MARGIN + m_inner_size.y ) )
 			continue; // Don't render asset if its too low
 
-		drawAsset( cursor_position, Vector2( 0.f, 0.f ) );
+		drawAsset( cursor_position, "INSERT_NAME", File::Type::TGA );
 		cursor_position.x += UI::MARGIN;
 	}
 
@@ -62,9 +66,24 @@ void AssetGrid::drawInner( Vector2 _cursor_position )
 	DrawTextureRec( m_grid_render_target.texture, rect, _cursor_position, Color( 255, 255, 255, 255 ) );
 }
 
-void AssetGrid::drawAsset( Vector2& _cursor_position, Vector2 _cutoff )
+void AssetGrid::drawAsset( Vector2& _cursor_position, const std::string& _name, File::Type _type )
 {
-	DrawRectangle( _cursor_position.x, _cursor_position.y, m_frame_size.x, m_frame_size.y, Color( 217, 217, 217, 255 ) );
+	Texture2D asset_texture;
+	switch( _type )
+	{
+		case File::Type::JSON: asset_texture = m_json_texture; break;
+		case File::Type::TGA:  asset_texture = m_tga_texture; break;
+		case File::Type::OGG:  asset_texture = m_ogg_texture; break;
+		default: _ASSERT( false );
+	}
+
+	Rectangle rect;
+	rect.x      = 0.f;
+	rect.y      = 0.f;
+	rect.height = m_frame_size.y;
+	rect.width  = m_frame_size.x;
+
+	DrawTextureRec( asset_texture, rect, _cursor_position, WHITE );
 	_cursor_position.x += m_frame_size.x;
 }
 
