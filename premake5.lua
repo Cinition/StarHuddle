@@ -53,6 +53,24 @@ workspace "StarHuddle"
         }
 
 
+    project "ZStd"
+        kind "StaticLib"
+        location ( "build" )
+        targetdir( "lib" )
+
+        files {
+            "dependencies/zstd/lib/zstd.h",
+            "dependencies/zstd/lib/compress/*.h",
+            "dependencies/zstd/lib/compress/*.c",
+            "dependencies/zstd/lib/decompress/*.h",
+            "dependencies/zstd/lib/decompress/*.c",
+        }
+
+        includedirs {
+            "dependencies/zstd/lib/common/",
+        }
+
+
     project "StarHuddle"
         kind "WindowedApp"
         location ( "build" )
@@ -69,10 +87,12 @@ workspace "StarHuddle"
             "opengl32",
             "gdi32",
             "winmm",
+            "ZStd",
         }
 
         includedirs {
             "src/",
             -- RayLib
             "dependencies/raylib/src",
+            "dependencies/zstd/lib/common/",
         }
