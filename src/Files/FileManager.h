@@ -25,8 +25,7 @@ private:
 
 	uint8_t* load_file( const std::string& _path );
 
-	static std::vector< size_t >                       m_selected_files;
-	static std::map< size_t, std::unique_ptr< File > > m_files;
+	inline static std::vector< size_t >                       m_selected_files;
+	inline static std::map< size_t, std::unique_ptr< File > > m_files;
 
 };
-
