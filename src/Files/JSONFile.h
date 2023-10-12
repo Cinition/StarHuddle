@@ -7,9 +7,9 @@ class JSONFile : public File
 
 public:
 
-	using File::File;
+	JSONFile( const std::filesystem::path& _path, uint8_t* _data );
 
-private:
+protected:
 
 	void handleData    ( uint8_t* _data );
 	void createMetaData( void );

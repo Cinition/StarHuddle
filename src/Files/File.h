@@ -17,12 +17,6 @@ public:
 		WAV = 4,
 	};
 
-	File( const std::filesystem::path& _path, uint8_t* _data )
-	{
-		handleData( _data );
-		createMetaData();
-	}
-
 	const auto& getName    ( void ) const { return m_name; }
 	const auto& getType    ( void ) const { return m_type; }
 	const auto& getHash    ( void ) const { return m_hash; }
@@ -30,7 +24,7 @@ public:
 
 protected:
 
-	virtual void handleData( uint8_t* ) = 0;
+	virtual void handleData( uint8_t* _data ) = 0;
 	virtual void createMetaData( void ) = 0;
 
 	size_t                     m_hash;
