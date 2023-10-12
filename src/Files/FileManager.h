@@ -12,18 +12,20 @@ public:
 
 	void loadFiles          ( void );
 	void checkFiles         ( void );
-	void importFiles        ( void );
+	void importFiles        ( const std::string& _path );
 	void exportFiles        ( void );
-	void addFileSelection   ( const std::string& _hash, bool _clear_selection = true );
-	void removeFileSelection( const std::string& _hash );
+	void addFileSelection   ( size_t _hash, bool _clear_selection = true );
+	void removeFileSelection( size_t _hash );
 
-	const std::vector< std::string >&    getFileSelection( void ) const { return m_selected_files; }
-	const std::map< std::string, File >& getFiles        ( void ) const { return m_files; }
+	const auto& getFileSelection( void ) const { return m_selected_files; }
+	const auto& getFiles        ( void ) const { return m_files; }
 
 private:
 
-	static std::vector< std::string >    m_selected_files;
-	static std::map< std::string, File > m_files;
+	uint8_t* load_file( const std::string& _path );
+
+	static std::vector< size_t >    m_selected_files;
+	static std::map< size_t, File > m_files;
 
 };
 

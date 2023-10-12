@@ -1,5 +1,5 @@
 #include "UI/Style.h"
-#include "Utility/FileManager.h"
+#include "Files/FileManager.h"
 #include "Layout/FilterBar.h"
 #include "Layout/DetailBar.h"
 #include "Layout/AssetGrid.h"
@@ -8,6 +8,8 @@
 
 int WinMain(void)
 {
+	FileManager file_manager;
+
 	Vector2 window_size = Vector2( 1450, 870 );
 	InitWindow( window_size.x, window_size.y, "StarHuddle");
 
@@ -29,6 +31,20 @@ int WinMain(void)
 	while (!WindowShouldClose())
 	{
 		// Update pass
+
+		if( IsFileDropped() )
+		{
+			auto dropped_files = LoadDroppedFiles();
+
+			for( int i = 0; i < dropped_files.count; i++ )
+			{
+				auto file_path = std::string( dropped_files.paths[ i ] );
+				file_manager.importFiles( file_path );
+			}
+
+			UnloadDroppedFiles( dropped_files );
+		}
+
 		filter_bar.update();
 		asset_grid.update();
 		detail_bar.update();
