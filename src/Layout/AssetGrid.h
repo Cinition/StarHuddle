@@ -19,9 +19,9 @@ public:
 private:
 
 	void drawInner( Vector2 _cursor_position ) override;
-	void drawAsset( Vector2& _cursor_position, const std::string& _name, File::Type _type );
 	void updateScrolling( float& _scroll_offset );
-	void calculateGridSize( int _asset_count, Vector2 _asset_size );
+	Vector2 drawAsset( Vector2& _cursor_position, const std::string& _name, File::Type _type );
+	Vector2 drawTitle( Vector2 _cursor_position, float _available_width, const std::string& _name );
 
 	RenderTexture2D m_grid_render_target;
 	Texture2D       m_json_texture;
