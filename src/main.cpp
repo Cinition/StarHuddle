@@ -10,10 +10,9 @@ int WinMain(void)
 {
 	FileManager file_manager;
 
-	Vector2 window_size = Vector2( 1450, 870 );
-	InitWindow( window_size.x, window_size.y, "StarHuddle");
+	InitWindow( UI::SCREEN_SIZE.x, UI::SCREEN_SIZE.y, "StarHuddle");
 
-	auto      full_inner_size = Vector2( window_size.x - ( UI::MARGIN * 2 ), window_size.y - ( UI::MARGIN * 2 ) );
+	auto      full_inner_size = Vector2( UI::SCREEN_SIZE.x - ( UI::MARGIN * 2 ), UI::SCREEN_SIZE.y - ( UI::MARGIN * 2 ) );
 
 	Vector2   detail_bar_size = Vector2( 200.f, full_inner_size.y );
 	Vector2   filter_bar_size = Vector2( full_inner_size.x - detail_bar_size.x - UI::MARGIN, 50 );
