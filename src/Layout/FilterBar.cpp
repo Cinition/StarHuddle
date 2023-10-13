@@ -12,6 +12,8 @@ FilterBar::FilterBar( Vector2& _cursor_position, Vector2 _size )
 
 void FilterBar::update()
 {
+	m_search.update();
+	m_filter.update();
 }
 
 void FilterBar::draw( void )
