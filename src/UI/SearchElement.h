@@ -4,6 +4,8 @@
 
 #include "raylib.h"
 
+#include <string>
+
 class SearchElement : public UIElement
 {
 public:
@@ -18,5 +20,7 @@ private:
 
 	void drawFocused( Vector2 _cursor_position );
 	void drawNotFocused( Vector2 _cursor_position );
+
+	std::string m_input;
 
 };
