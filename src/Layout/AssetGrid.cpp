@@ -11,6 +11,7 @@ constexpr float SCROLL_MULTIPLIER  = 20.f;
 AssetGrid::AssetGrid( Vector2& _cursor_position, Vector2 _size )
 : UIElement( _cursor_position, _size )
 {
+	m_asset_grid_size.x  = m_inner_size.x - UI::MARGIN * 2;
 	m_grid_render_target = LoadRenderTexture( m_inner_size.x, m_inner_size.y );
 	auto frame_width     = ( _size.x - UI::MARGIN ) / FRAME_ROW_COUNT - UI::MARGIN;
 	m_frame_size         = Vector2( frame_width, frame_width * FRAME_ASPECT_RATIO );
@@ -36,6 +37,7 @@ void AssetGrid::drawAssetGrid( void )
 	cursor_position.y += m_scroll_offset;
 
 	float row_max_height = 0.f;
+	m_asset_grid_size.y  = 0.0f;
 
 	for( int i = 0; i < m_temp_asset_count; i++ )
 	{
@@ -43,14 +45,9 @@ void AssetGrid::drawAssetGrid( void )
 		{
 			cursor_position.x = reset_position.x;
 			cursor_position.y += row_max_height + UI::MARGIN;
+			m_asset_grid_size.y += row_max_height + UI::MARGIN;
 			row_max_height = 0.f;
 		}
-
-		if( ( cursor_position.y + m_frame_size.y ) < reset_position.y )
-			continue; // Don't render asset if its too high
-
-		if( cursor_position.y > ( m_position.y + UI::MARGIN + m_inner_size.y ) )
-			continue; // Don't render asset if its too low
 
 		auto asset_size = drawAsset( cursor_position, "INSERT_BIGGER_NAME", File::Type::TGA );
 		row_max_height  = ( asset_size.y > row_max_height ? asset_size.y : row_max_height );
