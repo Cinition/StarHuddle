@@ -1,7 +1,8 @@
 #include "AssetGrid.h"
 
 #include "UI/Style.h"
-#include "Files/FileManager.h"
+#include "Assets/AssetManager.h"
+#include "Utils/ElementHelper.h"
 
 #include "raymath.h"
 
@@ -40,9 +41,9 @@ void AssetGrid::drawAssetGrid( void )
 	float row_max_height = 0.f;
 	m_asset_grid_size.y  = 0.0f;
 
-	FileManager file_manager;
-	auto&       assets      = file_manager.getFiles();
-	int         asset_index = 0;
+	AssetManager asset_manager;
+	auto         assets      = asset_manager.getAssets();
+	int          asset_index = 0;
 
 	for( auto& asset : assets )
 	{
@@ -54,8 +55,15 @@ void AssetGrid::drawAssetGrid( void )
 			row_max_height = 0.f;
 		}
 
-		auto asset_size = drawAsset( cursor_position, asset.second->getName(), File::Type::TGA );
+		auto asset_size = drawAsset( cursor_position, asset.second->getName(), Asset::Type::TGA );
 		row_max_height  = ( asset_size.y > row_max_height ? asset_size.y : row_max_height );
+
+		auto absolute_cursor_position = Vector2Add( cursor_position, GetMousePosition() );
+		if( ElementHelper::mouseInsideArea( absolute_cursor_position, Vector2Add( absolute_cursor_position, asset_size ) ) )
+		{
+			if( IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
+				asset_manager.addSelection( asset.second->getHash() );
+		}
 
 		cursor_position.x += UI::MARGIN;
 		asset_index += 1;
@@ -74,15 +82,15 @@ void AssetGrid::drawInner( Vector2 _cursor_position )
 	DrawTextureRec( m_grid_render_target.texture, rect, _cursor_position, Color( 255, 255, 255, 255 ) );
 }
 
-Vector2 AssetGrid::drawAsset( Vector2& _cursor_position, const std::string& _name, File::Type _type )
+Vector2 AssetGrid::drawAsset( Vector2& _cursor_position, const std::string& _name, Asset::Type _type )
 {
 	Vector2   asset_size{};
 	Texture2D asset_texture;
 	switch( _type )
 	{
-		case File::Type::JSON: asset_texture = m_json_texture; break;
-		case File::Type::TGA:  asset_texture = m_tga_texture; break;
-		case File::Type::OGG:  asset_texture = m_ogg_texture; break;
+		case Asset::Type::JSON: asset_texture = m_json_texture; break;
+		case Asset::Type::TGA:  asset_texture = m_tga_texture; break;
+		case Asset::Type::OGG:  asset_texture = m_ogg_texture; break;
 		default: _ASSERT( false );
 	}
 

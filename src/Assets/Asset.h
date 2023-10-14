@@ -4,7 +4,7 @@
 #include <string>
 #include <filesystem>
 
-class File
+class Asset
 {
 
 public:

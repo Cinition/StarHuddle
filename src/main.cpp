@@ -1,5 +1,5 @@
 #include "UI/Style.h"
-#include "Files/FileManager.h"
+#include "Assets/AssetManager.h"
 #include "Layout/FilterBar.h"
 #include "Layout/DetailBar.h"
 #include "Layout/AssetGrid.h"
@@ -8,7 +8,7 @@
 
 int WinMain(void)
 {
-	FileManager file_manager;
+	AssetManager asset_manager;
 
 	InitWindow( UI::SCREEN_SIZE.x, UI::SCREEN_SIZE.y, "StarHuddle");
 
@@ -38,7 +38,7 @@ int WinMain(void)
 			for( int i = 0; i < dropped_files.count; i++ )
 			{
 				auto file_path = std::string( dropped_files.paths[ i ] );
-				file_manager.importFiles( file_path );
+				asset_manager.importFile( file_path );
 			}
 
 			UnloadDroppedFiles( dropped_files );
