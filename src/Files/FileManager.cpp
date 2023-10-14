@@ -15,7 +15,7 @@ void FileManager::importFiles( const std::string& _path )
 
 	std::filesystem::path file_path = _path;
 	auto                  file_hash = std::hash< uint8_t >{}( *data * std::time( nullptr ) );
-	if( file_path.extension().string() == "json" )
+	if( file_path.extension().string() == std::string( ".json" ) )
 		m_files.emplace( file_hash, std::make_unique< JSONFile >( file_path, data ) );
 	else
 		return; // TODO: error popup

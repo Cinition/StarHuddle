@@ -1,6 +1,7 @@
 #include "AssetGrid.h"
 
 #include "UI/Style.h"
+#include "Files/FileManager.h"
 
 #include "raymath.h"
 
@@ -39,9 +40,13 @@ void AssetGrid::drawAssetGrid( void )
 	float row_max_height = 0.f;
 	m_asset_grid_size.y  = 0.0f;
 
-	for( int i = 0; i < m_temp_asset_count; i++ )
+	FileManager file_manager;
+	auto&       assets      = file_manager.getFiles();
+	int         asset_index = 0;
+
+	for( auto& asset : assets )
 	{
-		if( i > 0 && i % FRAME_ROW_COUNT == 0 )
+		if( asset_index > 0 && asset_index % FRAME_ROW_COUNT == 0 )
 		{
 			cursor_position.x = reset_position.x;
 			cursor_position.y += row_max_height + UI::MARGIN;
@@ -49,10 +54,11 @@ void AssetGrid::drawAssetGrid( void )
 			row_max_height = 0.f;
 		}
 
-		auto asset_size = drawAsset( cursor_position, "INSERT_BIGGER_NAME", File::Type::TGA );
+		auto asset_size = drawAsset( cursor_position, asset.second->getName(), File::Type::TGA );
 		row_max_height  = ( asset_size.y > row_max_height ? asset_size.y : row_max_height );
 
 		cursor_position.x += UI::MARGIN;
+		asset_index += 1;
 	}
 
 	EndTextureMode();
