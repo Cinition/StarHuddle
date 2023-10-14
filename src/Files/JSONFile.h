@@ -7,7 +7,7 @@ class JSONFile : public File
 
 public:
 
-	JSONFile( const std::filesystem::path& _path, uint8_t* _data );
+	JSONFile( size_t _hash, const std::filesystem::path& _path, uint8_t* _data );
 
 protected:
 
