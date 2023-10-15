@@ -4,3 +4,6 @@
 [submodule "dependencies/zstd"]
 	path = dependencies/zstd
 	url = https://github.com/facebook/zstd
+[submodule "dependencies/json"]
+	path = dependencies/json
+	url = https://github.com/nlohmann/json

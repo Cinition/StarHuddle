@@ -92,6 +92,8 @@ workspace "StarHuddle"
 
         includedirs {
             "src/",
+            -- nlohmann_json
+            "dependencies/json/single_include/nlohmann",
             -- RayLib
             "dependencies/raylib/src",
             "dependencies/zstd/lib/common/",
