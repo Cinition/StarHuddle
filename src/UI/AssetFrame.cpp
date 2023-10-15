@@ -1,6 +1,8 @@
 #include "AssetFrame.h"
 
+#include "Assets/AssetManager.h"
 #include "UI/Style.h"
+#include "Utils/ElementHelper.h"
 
 #include "raymath.h"
 
@@ -11,11 +13,13 @@ AssetFrame::AssetFrame( Vector2& _frame_position, Vector2 _frame_size, std::weak
 {
 }
 
-void AssetFrame::update( void )
+void AssetFrame::update( Vector2 _input_min, Vector2 _input_max )
 {
-	// Detect mouse
-	// Detect click
-	// Set selected by finding it in selection vector of asset manager
+	if( !ElementHelper::mouseInsideArea( _input_min, Vector2Add( _input_max, Vector2Negate( _input_min ) ) ) )
+		return;
+
+	detectSelection( Vector2Add( m_position, Vector2Add( _input_min, Vector2( UI::MARGIN, UI::MARGIN ) ) ) );
+	checkIfSelected();
 }
 
 Vector2 AssetFrame::draw( float _scroll_offset )
@@ -47,6 +51,40 @@ std::shared_ptr< Asset > AssetFrame::getAsset( void )
 
 	return nullptr;
 }
+
+void AssetFrame::detectSelection( Vector2 _absolute_position )
+{
+	if( ElementHelper::mouseInsideArea( _absolute_position, Vector2Add( _absolute_position, m_size ) ) )
+	{
+		if( IsMouseButtonPressed( MOUSE_LEFT_BUTTON ) )
+		{
+			auto locked_asset = getAsset();
+			if( !locked_asset )
+				return;
+
+			AssetManager::addSelection( locked_asset->getHash() );
+		}
+	}
+}
+
+void AssetFrame::checkIfSelected( void )
+{
+	auto locked_asset = getAsset();
+	if( !locked_asset )
+		return;
+
+	auto selection_vector = AssetManager::getAssetSelection();
+	auto selection_it     = std::find_if(
+        selection_vector.begin(), selection_vector.end(),
+        [ locked_asset ]( size_t _selection_hash )
+        {
+            return ( _selection_hash == locked_asset->getHash() );
+        } );
+
+	m_selected = ( selection_it != selection_vector.end() );
+
+}
+
 
 void AssetFrame::drawBackground( Vector2& _cursor_position )
 {

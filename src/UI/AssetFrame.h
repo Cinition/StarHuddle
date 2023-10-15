@@ -13,13 +13,15 @@ public:
 	AssetFrame( void ) = default;
 	AssetFrame( Vector2& _frame_position, Vector2 _frame_size, std::weak_ptr< Asset > _asset );
 
-	void    update( void );
+	void    update( Vector2 _input_min, Vector2 _input_max );
 	Vector2 draw( float _scroll_offset );
 
 	std::shared_ptr< Asset > getAsset( void );
 
 private:
 
+	void detectSelection( Vector2 _absolute_position );
+	void checkIfSelected( void );
 	void drawBackground( Vector2& _cursor_position );
 	void drawIcon( Vector2& _cursor_position );
 	void drawTitle( Vector2& _cursor_position );
@@ -30,5 +32,6 @@ private:
 	Vector2                m_size;
 	Vector2                m_selection_square_size = Vector2( 25.f, 25.f );
 	bool                   m_selected              = false;
+	float                  m_last_scroll_offset    = 0.f;
 
 };

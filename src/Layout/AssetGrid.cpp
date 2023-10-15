@@ -46,7 +46,7 @@ void AssetGrid::update(void)
 	}
 
 	for( auto& frame : m_asset_frames )
-		frame.update();
+		frame.update( m_position, Vector2Add( m_position, m_size ) );
 
 	drawAssetGrid();
 	updateScrolling( m_scroll_offset );

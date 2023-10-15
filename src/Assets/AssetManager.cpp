@@ -2,10 +2,13 @@
 
 #include "JSONAsset.h"
 
+#include "raylib.h"
+
 #include <io.h>
 #include <direct.h>
 #include <ctime>
 #include <functional>
+#include <iostream>
 #include <algorithm>
 
 void AssetManager::importFile( const std::string& _path )
@@ -14,8 +17,9 @@ void AssetManager::importFile( const std::string& _path )
 	if( !data )
 		return; // TODO: error popup
 
-	std::filesystem::path file_path = _path;
-	auto                  file_hash = std::hash< uint8_t >{}( *data * std::time( nullptr ) );
+	std::filesystem::path file_path            = _path;
+	auto                  millisec_since_epoch = duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now().time_since_epoch() ).count();
+	auto                  file_hash            = std::hash< uint8_t >{}( *data * millisec_since_epoch * m_next_offset++ );
 	if( file_path.extension().string() == std::string( ".json" ) )
 		m_assets.push_back( std::make_shared< JSONAsset >( file_hash, file_path, data ) );
 	else
@@ -23,8 +27,11 @@ void AssetManager::importFile( const std::string& _path )
 
 }
 
-void AssetManager::addSelection( size_t _hash, bool _clear_selection )
+void AssetManager::addSelection( size_t _hash )
 {
+	if( !IsKeyDown( KEY_LEFT_CONTROL ) )
+		m_selected_assets.clear();
+
 	m_selected_assets.push_back( _hash );
 }
 
