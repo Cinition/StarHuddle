@@ -49,6 +49,11 @@ void AssetManager::exportAsset( size_t _hash, const std::string& _path )
 	saveFile( file_path, asset->getData(), asset->getDataSize() );
 }
 
+void AssetManager::packageAssets( void )
+{
+
+}
+
 std::shared_ptr< Asset > AssetManager::getAsset( size_t _hash )
 {
 	auto asset_it = std::find_if( m_assets.begin(), m_assets.end(),

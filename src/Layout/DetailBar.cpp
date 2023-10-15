@@ -25,6 +25,11 @@ void DetailBar::drawInner( Vector2 _cursor_position )
 
 void DetailBar::exportFile( void )
 {
+	AssetManager asset_manager;
+	if( asset_manager.getAssetSelection().empty() )
+		return;
+
+
 	// open windows dialog
 	std::filesystem::path path = std::filesystem::current_path();
 	char                  file_path_buffer[ 2048 ]{};
@@ -47,7 +52,6 @@ void DetailBar::exportFile( void )
 				PWSTR file_path;
 				if( SUCCEEDED( shell_item->GetDisplayName( SIGDN_FILESYSPATH, &file_path ) ) )
 				{
-					AssetManager asset_manager;
 					for( auto& selected_asset_hash : asset_manager.getAssetSelection() )
 					{
 						auto wide_string = std::wstring( file_path );
