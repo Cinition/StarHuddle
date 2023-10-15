@@ -19,7 +19,7 @@ public:
 	struct MetaData
 	{
 		std::string name;
-		std::string data
+		std::string data;
 	};
 
 	const auto& getName    ( void ) const { return m_name; }

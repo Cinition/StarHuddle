@@ -11,7 +11,6 @@ TGAAsset::TGAAsset( size_t _hash, const std::filesystem::path& _path, uint8_t* _
 	m_data      = _data;
 	m_data_size = _data_size;
 
-	handleData( _data );
 	createMetaData();
 }
 
@@ -21,7 +20,6 @@ void TGAAsset::handleData( uint8_t* _data )
 
 void TGAAsset::createMetaData( void )
 {
-	m_meta_data.push_back( "File Size: 125KB" );
-	m_meta_data.push_back( "Date Added: 12/10/2023" );
-
+	m_meta_data.push_back( { "File Size:", "125KB" } );
+	m_meta_data.push_back( { "Date Added:", "12/10/2023" } );
 }

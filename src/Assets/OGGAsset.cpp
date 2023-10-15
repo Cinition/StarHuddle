@@ -21,7 +21,6 @@ void OGGAsset::handleData( uint8_t* _data )
 
 void OGGAsset::createMetaData( void )
 {
-	m_meta_data.push_back( "File Size: 235KB" );
-	m_meta_data.push_back( "Date Added: 7/10/2023" );
-
+	m_meta_data.push_back( { "File Size:", "235KB" } );
+	m_meta_data.push_back( { "Date Added:", "7/10/2023" } );
 }
