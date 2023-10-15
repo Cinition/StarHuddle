@@ -1,5 +1,7 @@
 #include "OGGAsset.h"
 
+#include "Utils/StringHelper.h"
+
 #include <filesystem>
 
 OGGAsset::OGGAsset( size_t _hash, const std::filesystem::path& _path, uint8_t* _data, uint32_t _data_size )
@@ -17,10 +19,15 @@ OGGAsset::OGGAsset( size_t _hash, const std::filesystem::path& _path, uint8_t* _
 
 void OGGAsset::handleData( uint8_t* _data )
 {
+	// Implement Vorbig OGG headerpage reading
 }
 
 void OGGAsset::createMetaData( void )
 {
-	m_meta_data.push_back( { "File Size:", "235KB" } );
-	m_meta_data.push_back( { "Date Added:", "7/10/2023" } );
+	auto time = std::time( nullptr );
+	char time_string[ std::size( "dd/mm/yyyy hh::mm" ) ];
+	std::strftime( std::data( time_string ), std::size( time_string ), "%d/%m/%Y %H:%M", std::localtime( &time ) );
+
+	m_meta_data.push_back( { "Size:", StringHelper::format( "%iKB", ( m_data_size / 1024 ) ) } );
+	m_meta_data.push_back( { "Added:", time_string } );
 }

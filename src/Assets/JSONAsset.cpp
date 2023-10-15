@@ -18,10 +18,6 @@ JSONAsset::JSONAsset( size_t _hash, const std::filesystem::path& _path, uint8_t*
 	createMetaData();
 }
 
-void JSONAsset::handleData( uint8_t* _data )
-{
-}
-
 void JSONAsset::createMetaData( void )
 {
 	auto time = std::time( nullptr );
