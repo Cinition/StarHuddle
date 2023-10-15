@@ -17,7 +17,7 @@ void AssetManager::importFile( const std::string& _path )
 	std::filesystem::path file_path = _path;
 	auto                  file_hash = std::hash< uint8_t >{}( *data * std::time( nullptr ) );
 	if( file_path.extension().string() == std::string( ".json" ) )
-		m_files.emplace( file_hash, std::make_shared< JSONAsset >( file_hash, file_path, data ) );
+		m_assets.push_back( std::make_shared< JSONAsset >( file_hash, file_path, data ) );
 	else
 		return; // TODO: error popup
 
@@ -25,17 +25,31 @@ void AssetManager::importFile( const std::string& _path )
 
 void AssetManager::addSelection( size_t _hash, bool _clear_selection )
 {
-	m_selected_files.push_back( _hash );
+	m_selected_assets.push_back( _hash );
 }
 
 void AssetManager::removeSelection( size_t _hash )
 {
-	auto selection_it = std::find_if( m_selected_files.begin(), m_selected_files.end(), [ _hash ]( size_t hash_value ){ return hash_value == _hash; } );
-	if( selection_it != m_selected_files.end() )
+	auto selection_it = std::find_if( m_selected_assets.begin(), m_selected_assets.end(), [ _hash ]( size_t hash_value ){ return hash_value == _hash; } );
+	if( selection_it != m_selected_assets.end() )
 	{
-		m_selected_files.erase( selection_it );
+		m_selected_assets.erase( selection_it );
 		return;
 	}
+}
+
+bool AssetManager::hasAssetsUpdated( void )
+{
+	size_t checksum{};
+	for( auto asset : m_assets )
+		checksum ^= std::hash< std::shared_ptr< Asset > >{}( asset );
+
+	if( checksum != m_checksum_hash )
+	{
+		m_checksum_hash = checksum;
+		return true;
+	}
+	return false;
 }
 
 uint8_t* AssetManager::loadFile( const std::string& _path )

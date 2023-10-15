@@ -47,8 +47,8 @@ void Notification::draw( Vector2& _cursor_position )
 
 	_cursor_position.y += rect.height + UI::MARGIN;
 
-	DrawRectangleRounded( shadow_rect, 0.25f, 11, UI::BACKGROUND_COLOR );
-	DrawRectangleRounded( rect, 0.25f, 11, UI::ELEMENT_BG_COLOR );
+	DrawRectangleRounded( shadow_rect, 0.25f, 11, UI::ACCENT1 );
+	DrawRectangleRounded( rect, 0.25f, 11, UI::ACCENT2 );
 
 	Vector2 text_pos = Vector2( _cursor_position.x + UI::MARGIN, _cursor_position.y + UI::MARGIN );
 	DrawText( m_text.c_str(), text_pos.x, text_pos.y, 10, UI::TEXT_COLOR );

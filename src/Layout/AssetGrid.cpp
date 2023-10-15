@@ -6,7 +6,7 @@
 
 #include "raymath.h"
 
-constexpr int   FRAME_ROW_COUNT    = 9;
+constexpr int   FRAME_ROW_COUNT    = 7;
 constexpr float FRAME_ASPECT_RATIO = 1.5f;
 constexpr float SCROLL_MULTIPLIER  = 20.f;
 
@@ -15,16 +15,39 @@ AssetGrid::AssetGrid( Vector2& _cursor_position, Vector2 _size )
 {
 	m_asset_grid_size.x  = m_inner_size.x - UI::MARGIN * 2;
 	m_grid_render_target = LoadRenderTexture( m_inner_size.x, m_inner_size.y );
-	auto frame_width     = ( _size.x - UI::MARGIN ) / FRAME_ROW_COUNT - UI::MARGIN;
+	auto frame_width     = ( ( _size.x - ( UI::MARGIN * ( FRAME_ROW_COUNT + 1 ) ) ) / FRAME_ROW_COUNT );
 	m_frame_size         = Vector2( frame_width, frame_width * FRAME_ASPECT_RATIO );
-
-	m_json_texture       = LoadTexture( "../data/textures/JSON.png" );
-	m_tga_texture        = LoadTexture( "../data/textures/TGA.png" );
-	m_ogg_texture        = LoadTexture( "../data/textures/OGG.png" );
 }
 
 void AssetGrid::update(void)
 {
+	// Don't like this solution, but
+	// it's the only way without making this an immidiate mode interface
+	AssetManager asset_manager;
+	if( asset_manager.hasAssetsUpdated() )
+	{
+		m_asset_frames.clear();
+		int     asset_index     = 0;
+		Vector2 reset_position  = Vector2( 0.f, 0.f );
+		Vector2 cursor_position = reset_position;
+
+		for( auto& asset : asset_manager.getAssets() )
+		{
+			if( asset_index > 0 && asset_index % FRAME_ROW_COUNT == 0 )
+			{
+				cursor_position.x = reset_position.x;
+				cursor_position.y += m_frame_size.y + UI::MARGIN;
+			}
+
+			m_asset_frames.push_back( { cursor_position, m_frame_size, asset } );
+			cursor_position.x += m_frame_size.x + UI::MARGIN;
+			asset_index += 1;
+		}
+	}
+
+	for( auto& frame : m_asset_frames )
+		frame.update();
+
 	drawAssetGrid();
 	updateScrolling( m_scroll_offset );
 }
@@ -34,39 +57,34 @@ void AssetGrid::drawAssetGrid( void )
 	BeginTextureMode( m_grid_render_target );
 	ClearBackground( Color( 0.f, 0.f, 0.f, 0.f ) );
 
-	Vector2 cursor_position = Vector2( 0.f, 0.f );
-	Vector2 reset_position  = cursor_position;
+	Vector2 reset_position  = Vector2( 0.f, 0.f );
+	Vector2 cursor_position = reset_position;
 	cursor_position.y += m_scroll_offset;
 
+	int asset_index      = 0;
 	float row_max_height = 0.f;
-	m_asset_grid_size.y  = 0.0f;
+	m_asset_grid_size.y  = 0.f;
 
-	AssetManager asset_manager;
-	auto         assets      = asset_manager.getAssets();
-	int          asset_index = 0;
-
-	for( auto& asset : assets )
+	for( auto& asset : m_asset_frames )
 	{
+		if( asset_index == ( m_asset_frames.size() - 1 ) )
+			m_asset_grid_size.y += row_max_height;
+		else if( ( asset_index > 0 && asset_index % FRAME_ROW_COUNT == 0 ))
+			m_asset_grid_size.y += row_max_height + UI::MARGIN;
+
 		if( asset_index > 0 && asset_index % FRAME_ROW_COUNT == 0 )
 		{
 			cursor_position.x = reset_position.x;
 			cursor_position.y += row_max_height + UI::MARGIN;
-			m_asset_grid_size.y += row_max_height + UI::MARGIN;
 			row_max_height = 0.f;
 		}
 
-		auto asset_size = drawAsset( cursor_position, asset.second->getName(), Asset::Type::TGA );
+
+		auto asset_size = asset.draw( m_scroll_offset );
 		row_max_height  = ( asset_size.y > row_max_height ? asset_size.y : row_max_height );
 
-		auto absolute_cursor_position = Vector2Add( cursor_position, GetMousePosition() );
-		if( ElementHelper::mouseInsideArea( absolute_cursor_position, Vector2Add( absolute_cursor_position, asset_size ) ) )
-		{
-			if( IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
-				asset_manager.addSelection( asset.second->getHash() );
-		}
-
 		cursor_position.x += UI::MARGIN;
-		asset_index += 1;
+		asset_index       += 1;
 	}
 
 	EndTextureMode();
@@ -80,71 +98,6 @@ void AssetGrid::drawInner( Vector2 _cursor_position )
 	rect.height = -m_grid_render_target.texture.height;
 	rect.width  = m_grid_render_target.texture.width;
 	DrawTextureRec( m_grid_render_target.texture, rect, _cursor_position, Color( 255, 255, 255, 255 ) );
-}
-
-Vector2 AssetGrid::drawAsset( Vector2& _cursor_position, const std::string& _name, Asset::Type _type )
-{
-	Vector2   asset_size{};
-	Texture2D asset_texture;
-	switch( _type )
-	{
-		case Asset::Type::JSON: asset_texture = m_json_texture; break;
-		case Asset::Type::TGA:  asset_texture = m_tga_texture; break;
-		case Asset::Type::OGG:  asset_texture = m_ogg_texture; break;
-		default: _ASSERT( false );
-	}
-
-	Rectangle rect{};
-	rect.x      = 0.f;
-	rect.y      = 0.f;
-	rect.height = m_frame_size.y;
-	rect.width  = m_frame_size.x;
-
-	DrawTextureRec( asset_texture, rect, _cursor_position, WHITE );
-	asset_size = Vector2Add( asset_size, m_frame_size );
-
-	Vector2 text_margin = Vector2( 14, UI::MARGIN / 2  );
-	Vector2 text_pos    = Vector2( _cursor_position.x + text_margin.x / 2, _cursor_position.y + m_frame_size.y + text_margin.y );
-	Vector2 title_size  = drawTitle( text_pos, m_frame_size.x - text_margin.x, _name );
-	asset_size = Vector2Add( asset_size, title_size );
-
-	_cursor_position.x += m_frame_size.x;
-
-	return asset_size;
-}
-
-Vector2 AssetGrid::drawTitle( Vector2 _cursor_position, float _available_width, const std::string& _name )
-{
-	Vector2 title_size{};
-	Font    font = GetFontDefault();
-
-	int font_size = 12;
-	int column_count = 1;
-	title_size    = MeasureTextEx( font, _name.c_str(), font_size, 0.f );
-
-	std::string formatted_text = _name;
-	if( title_size.x > _available_width )
-	{
-		// Rough wrapping calculation
-		float average_char_width = title_size.x / static_cast< int >( _name.size() );
-		column_count             += static_cast< int >( title_size.x / _available_width );
-		title_size.y             = font_size * column_count;
-		for (int i = 0; i < column_count; i++)
-		{
-			auto rough_row_count = _available_width / average_char_width;
-			auto row_string      = formatted_text.substr( rough_row_count * i, rough_row_count * ( i + 1 ) );
-			auto line_width      = static_cast< int >( row_string.size() ) * average_char_width;
-
-			DrawText( row_string.c_str(), _cursor_position.x + ( ( _available_width - line_width ) / 2 ), _cursor_position.y + ( font_size * i ), font_size, WHITE );
-		}
-	}
-	else
-	{
-		_cursor_position.x += ( ( _available_width - title_size.x ) / 2 );
-		DrawText( formatted_text.c_str(), _cursor_position.x, _cursor_position.y, font_size, WHITE );
-	}
-
-	return title_size;
 }
 
 void AssetGrid::updateScrolling( float& _scroll_offset )

@@ -23,7 +23,7 @@ void UIElement::draw( void )
 
 	float pixel_percentage = m_roundness / fmin( m_size.x, m_size.y );
 
-	DrawRectangleRounded( rect, pixel_percentage, 11, ( m_if_focused ? UI::FOCUS_BG_COLOR : UI::ELEMENT_BG_COLOR ) );
+	DrawRectangleRounded( rect, pixel_percentage, 11, ( m_if_focused ? UI::ACCENT4 : UI::ACCENT2 ) );
 
 	if( m_use_inner_margin )
 	{

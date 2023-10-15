@@ -53,7 +53,7 @@ int WinMain(void)
 
 		// Render pass
 		BeginDrawing();
-		ClearBackground( UI::BACKGROUND_COLOR );
+		ClearBackground( UI::ACCENT1 );
 
 		asset_grid.draw();
 		filter_bar.draw();
