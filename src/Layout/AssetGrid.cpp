@@ -92,7 +92,7 @@ void AssetGrid::drawAssetGrid( void )
 
 void AssetGrid::drawInner( Vector2 _cursor_position )
 {
-	Rectangle rect;
+	RaylibRectangle rect;
 	rect.x      = 0.f;
 	rect.y      = 0.f;
 	rect.height = -m_grid_render_target.texture.height;

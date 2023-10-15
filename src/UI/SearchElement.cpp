@@ -50,7 +50,7 @@ void SearchElement::drawFocused( Vector2 _cursor_position )
 	// draw inputed text
 	auto    font_size = 16;
 	Vector2 text_pos  = Vector2( _cursor_position.x + ( UI::MARGIN / 2 ), _cursor_position.y + ( UI::MARGIN / 2 ) + ( 16 / 2 ) );
-	DrawText( m_input.c_str(), text_pos.x, text_pos.y, font_size, UI::TEXT_COLOR );
+	RaylibDrawText( m_input.c_str(), text_pos.x, text_pos.y, font_size, UI::TEXT_COLOR );
 	// draw blinker
 }
 
@@ -59,5 +59,5 @@ void SearchElement::drawNotFocused( Vector2 _cursor_position )
 	// draw search icon
 	auto    font_size = 16;
 	Vector2 text_pos  = Vector2( _cursor_position.x + ( UI::MARGIN / 2 ), _cursor_position.y + ( UI::MARGIN / 2 ) + ( 16 / 2 ) );
-	DrawText( "Search for any Asset", text_pos.x, text_pos.y, font_size, UI::TEXT_COLOR );
+	RaylibDrawText( "Search for any Asset", text_pos.x, text_pos.y, font_size, UI::TEXT_COLOR );
 }

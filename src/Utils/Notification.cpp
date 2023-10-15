@@ -35,13 +35,13 @@ void Notification::update( void )
 
 void Notification::draw( Vector2& _cursor_position )
 {
-	Rectangle rect;
+	RaylibRectangle rect;
 	rect.x      = _cursor_position.x;
 	rect.y      = _cursor_position.y;
 	rect.height = m_popup_size.y + ( 12 * ( m_columns - 1 ) );
 	rect.width  = m_popup_size.x;
 
-	Rectangle shadow_rect = rect;
+	RaylibRectangle shadow_rect = rect;
 	shadow_rect.x += 5.f;
 	shadow_rect.y += 5.f;
 
@@ -51,5 +51,5 @@ void Notification::draw( Vector2& _cursor_position )
 	DrawRectangleRounded( rect, 0.25f, 11, UI::ACCENT2 );
 
 	Vector2 text_pos = Vector2( _cursor_position.x + UI::MARGIN, _cursor_position.y + UI::MARGIN );
-	DrawText( m_text.c_str(), text_pos.x, text_pos.y, 10, UI::TEXT_COLOR );
+	RaylibDrawText( m_text.c_str(), text_pos.x, text_pos.y, 10, UI::TEXT_COLOR );
 }

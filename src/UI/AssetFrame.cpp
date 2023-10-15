@@ -31,7 +31,7 @@ Vector2 AssetFrame::draw( float _scroll_offset )
 	cursor_position = Vector2Add( cursor_position, Vector2( UI::MARGIN, UI::MARGIN ) );
 	drawIcon( cursor_position );
 
-	cursor_position = Vector2Add( cursor_position, Vector2( 0.f, UI::MARGIN / 2 ) );
+	cursor_position = Vector2Add( cursor_position, Vector2( -UI::MARGIN / 2, UI::MARGIN / 2 ) );
 	drawTitle( cursor_position );
 
 	// Only calculate asset frame height, as that's dynamic
@@ -88,7 +88,7 @@ void AssetFrame::checkIfSelected( void )
 
 void AssetFrame::drawBackground( Vector2& _cursor_position )
 {
-	Rectangle rect;
+	RaylibRectangle rect;
 	rect.x = _cursor_position.x;
 	rect.y = _cursor_position.y;
 	rect.width = m_size.x;
@@ -113,13 +113,13 @@ void AssetFrame::drawIcon( Vector2& _cursor_position )
 		}
 	}
 
-	Rectangle texture_rect;
+	RaylibRectangle texture_rect;
 	texture_rect.x = 0.f;
 	texture_rect.y = 0.f;
 	texture_rect.width = asset_texture.width;
 	texture_rect.height = asset_texture.height;
 
-	Rectangle rect;
+	RaylibRectangle rect;
 	rect.x = _cursor_position.x;
 	rect.y = _cursor_position.y;
 	rect.width = m_size.x - ( UI::MARGIN * 2 );
@@ -143,7 +143,7 @@ void AssetFrame::drawTitle( Vector2& _cursor_position )
 	int         font_size       = 12;
 	Font        font            = GetFontDefault();
 	Vector2     title_size      = MeasureTextEx( font, title.c_str(), font_size, 0.f );
-	float       available_width = m_size.x - ( UI::MARGIN );
+	float       available_width = m_size.x - ( UI::MARGIN * 2 );
 
 	std::string formatted_text = title;
 	if( title_size.x > available_width )
@@ -158,7 +158,7 @@ void AssetFrame::drawTitle( Vector2& _cursor_position )
 			auto row_string      = formatted_text.substr( rough_row_count * i, rough_row_count * ( i + 1 ) );
 			auto line_width      = static_cast< int >( row_string.size() ) * average_char_width;
 
-			DrawText( row_string.c_str(), _cursor_position.x + ( ( available_width - line_width ) / 2 ), _cursor_position.y + ( font_size * i ), font_size, WHITE );
+			RaylibDrawText( row_string.c_str(), _cursor_position.x + ( ( available_width - line_width ) / 2 ), _cursor_position.y + ( font_size * i ), font_size, WHITE );
 			_cursor_position.y += font_size;
 		}
 		_cursor_position.y += UI::MARGIN / 2;
@@ -166,7 +166,7 @@ void AssetFrame::drawTitle( Vector2& _cursor_position )
 	else
 	{
 		_cursor_position.x += ( ( available_width - title_size.x ) / 2 );
-		DrawText( formatted_text.c_str(), _cursor_position.x, _cursor_position.y, font_size, WHITE );
+		RaylibDrawText( formatted_text.c_str(), _cursor_position.x, _cursor_position.y, font_size, WHITE );
 		_cursor_position.y += font_size;
 		_cursor_position.y += UI::MARGIN / 2;
 	}
@@ -174,7 +174,7 @@ void AssetFrame::drawTitle( Vector2& _cursor_position )
 
 void AssetFrame::drawSelected( Vector2& _cursor_position )
 {
-	Rectangle rect;
+	RaylibRectangle rect;
 	rect.x      = _cursor_position.x;
 	rect.y      = _cursor_position.y;
 	rect.width  = m_selection_square_size.x;

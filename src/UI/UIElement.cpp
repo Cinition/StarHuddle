@@ -15,7 +15,7 @@ void UIElement::draw( void )
 {
 	Vector2 cursor = m_position;
 
-	Rectangle rect;
+	RaylibRectangle rect;
 	rect.x = cursor.x;
 	rect.y = cursor.y;
 	rect.width = m_size.x;

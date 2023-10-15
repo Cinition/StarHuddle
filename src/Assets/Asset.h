@@ -16,6 +16,12 @@ public:
 		OGG = 2,
 	};
 
+	struct MetaData
+	{
+		std::string name;
+		std::string data
+	};
+
 	const auto& getName    ( void ) const { return m_name; }
 	const auto& getType    ( void ) const { return m_type; }
 	const auto& getHash    ( void ) const { return m_hash; }
@@ -28,12 +34,12 @@ protected:
 	virtual void handleData( uint8_t* _data ) = 0;
 	virtual void createMetaData( void ) = 0;
 
-	size_t                     m_hash;
-	std::string                m_name;
-	Type                       m_type;
-	std::filesystem::path      m_path;
-	std::vector< std::string > m_meta_data;
-	void*                      m_data;
-	uint32_t                   m_data_size;
+	size_t                  m_hash;
+	std::string             m_name;
+	Type                    m_type;
+	std::filesystem::path   m_path;
+	std::vector< MetaData > m_meta_data;
+	void*                   m_data;
+	uint32_t                m_data_size;
 
 };

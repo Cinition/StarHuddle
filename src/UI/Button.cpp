@@ -46,7 +46,7 @@ void Button::draw( void )
 		bg_color = ColorFromHSV( hovered_color.x, hovered_color.y, hovered_color.z );
 	}
 
-	Rectangle rectangle;
+	RaylibRectangle rectangle;
 	rectangle.x      = m_position.x;
 	rectangle.y      = m_position.y;
 	rectangle.width  = m_size.x;
@@ -55,7 +55,7 @@ void Button::draw( void )
 	DrawRectangleRounded( rectangle, 0.75f, 11, bg_color );
 
 	int font_size = 15;
-	DrawText( m_text.c_str(), m_position.x + ( m_size.x - MeasureText( m_text.c_str(), font_size ) ) / 2, m_position.y + ( m_size.y - font_size ) / 2, font_size, UI::TEXT_COLOR );
+	RaylibDrawText( m_text.c_str(), m_position.x + ( m_size.x - MeasureText( m_text.c_str(), font_size ) ) / 2, m_position.y + ( m_size.y - font_size ) / 2, font_size, UI::TEXT_COLOR );
 }
 
 void Button::checkIfButtonPressed(Vector2 _cursor_position)
