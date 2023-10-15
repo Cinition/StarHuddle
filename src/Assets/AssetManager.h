@@ -17,11 +17,13 @@ public:
 		uint32_t data_size;
 	};
 
-	static void importFile ( const std::string& _path );
-	static void exportAsset( size_t _hash, const std::string& _path );
-	static std::shared_ptr< Asset > getAsset( size_t _hash );
-	static void addSelection   ( size_t _hash );
-	static void removeSelection( size_t _hash );
+	static void                     importFile( const std::string& _path );
+	static void                     exportAsset( size_t _hash, const std::string& _path );
+	static void                     packageAssets( void );
+	static auto                     getAsset( size_t _hash ) -> std::shared_ptr< Asset >;
+	static void                     addSelection( size_t _hash );
+	static void                     removeSelection( size_t _hash );
+
 	static auto getAssetSelection( void ) { return m_selected_assets; }
 	static auto getAssets        ( void ) { return m_assets; }
 	static bool hasAssetsUpdated ( void );

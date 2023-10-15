@@ -2,6 +2,7 @@
 
 #include "UI/SearchElement.h"
 #include "UI/FilterElement.h"
+#include "UI/Button.h"
 
 class FilterBar
 {
@@ -14,7 +15,10 @@ public:
 
 private:
 
+	static void packageAssets( void );
+
 	SearchElement m_search;
 	FilterElement m_filter;
+	Button        m_package_button;
 
 };

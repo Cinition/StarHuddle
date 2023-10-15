@@ -14,8 +14,8 @@ int WinMain(void)
 
 	auto      full_inner_size = Vector2( UI::SCREEN_SIZE.x - ( UI::MARGIN * 2 ), UI::SCREEN_SIZE.y - ( UI::MARGIN * 2 ) );
 
-	Vector2   detail_bar_size = Vector2( 200.f, full_inner_size.y );
-	Vector2   filter_bar_size = Vector2( full_inner_size.x - detail_bar_size.x - UI::MARGIN, 50 );
+	Vector2   filter_bar_size = Vector2( full_inner_size.x , 50 );
+	Vector2   detail_bar_size = Vector2( 200.f, full_inner_size.y - filter_bar_size.y - UI::MARGIN);
 	Vector2   asset_grid_size = Vector2( full_inner_size.x - detail_bar_size.x - UI::MARGIN, full_inner_size.y - filter_bar_size.y - UI::MARGIN );
 
 	Vector2   cursor_position = Vector2( UI::MARGIN, UI::MARGIN );
@@ -24,7 +24,7 @@ int WinMain(void)
 	cursor_position           = Vector2( UI::MARGIN, UI::MARGIN + filter_bar_size.y + UI::MARGIN ); // Cursor Repositions
 	AssetGrid asset_grid      = AssetGrid( cursor_position, asset_grid_size );
 
-	cursor_position           = Vector2( UI::MARGIN + filter_bar_size.x + UI::MARGIN, UI::MARGIN ); // Cursor Repositions
+	cursor_position           = Vector2( asset_grid_size.x + ( UI::MARGIN * 2 ), filter_bar_size.y + ( UI::MARGIN * 2 ) ); // Cursor Repositions
 	DetailBar detail_bar      = DetailBar( cursor_position, detail_bar_size );
 
 	while (!WindowShouldClose())
