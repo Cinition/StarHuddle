@@ -27,6 +27,20 @@ void AssetManager::importFile( const std::string& _path )
 
 }
 
+std::shared_ptr< Asset > AssetManager::getAsset( size_t _hash )
+{
+	auto asset_it = std::find_if( m_assets.begin(), m_assets.end(),
+		[ _hash ]( std::shared_ptr< Asset > _asset )
+		{
+			return ( _asset->getHash() == _hash );
+		} );
+
+	if( asset_it != m_assets.end() )
+		return *asset_it;
+
+	return nullptr;
+}
+
 void AssetManager::addSelection( size_t _hash )
 {
 	if( !IsKeyDown( KEY_LEFT_CONTROL ) )

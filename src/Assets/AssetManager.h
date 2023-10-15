@@ -14,6 +14,7 @@ public:
 	void importFile     ( const std::string& _path );
 	void exportFile     ( void );
 
+	static std::shared_ptr< Asset > getAsset( size_t _hash );
 	static void addSelection   ( size_t _hash );
 	static void removeSelection( size_t _hash );
 	static auto getAssetSelection( void ) { return m_selected_assets; }
