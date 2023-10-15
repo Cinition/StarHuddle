@@ -87,13 +87,13 @@ void DetailBar::drawAssetName( Vector2& _cursor_position, const std::string& _te
 void DetailBar::drawMetaData( Vector2& _cursor_position, const Asset::MetaData& _meta_data )
 {
 	int     font_size        = 12;
-	int     _name_width      = MeasureText( _meta_data.name.c_str(), font_size );
-	int     _data_width      = MeasureText( _meta_data.data.c_str(), font_size );
-	Vector2 _name_pos        = Vector2( _cursor_position.x, _cursor_position.y );
-	Vector2 _data_pos        = Vector2( _cursor_position.x + m_inner_size.x - _data_width, _cursor_position.y );
+	int     name_width      = MeasureText( _meta_data.name.c_str(), font_size );
+	int     data_width      = MeasureText( _meta_data.data.c_str(), font_size );
+	Vector2 name_pos        = Vector2( _cursor_position.x, _cursor_position.y );
+	Vector2 data_pos        = Vector2( _cursor_position.x + m_inner_size.x - data_width, _cursor_position.y );
 
-	RaylibDrawText( _meta_data.name.c_str(), _name_pos.x, _name_pos.y, font_size, UI::TEXT_COLOR );
-	RaylibDrawText( _meta_data.data.c_str(), _data_pos.x, _data_pos.y, font_size, UI::TEXT_COLOR );
+	RaylibDrawText( _meta_data.name.c_str(), name_pos.x, name_pos.y, font_size, UI::TEXT_COLOR );
+	RaylibDrawText( _meta_data.data.c_str(), data_pos.x, data_pos.y, font_size, UI::TEXT_COLOR );
 
 	_cursor_position.y += font_size;
 }
