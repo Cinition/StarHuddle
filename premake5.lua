@@ -60,6 +60,8 @@ workspace "StarHuddle"
 
         files {
             "dependencies/zstd/lib/zstd.h",
+            "dependencies/zstd/lib/common/*.h",
+            "dependencies/zstd/lib/common/*.c",
             "dependencies/zstd/lib/compress/*.h",
             "dependencies/zstd/lib/compress/*.c",
             "dependencies/zstd/lib/decompress/*.h",
@@ -96,5 +98,5 @@ workspace "StarHuddle"
             "dependencies/json/single_include/nlohmann",
             -- RayLib
             "dependencies/raylib/src",
-            "dependencies/zstd/lib/common/",
+            "dependencies/zstd/lib",
         }

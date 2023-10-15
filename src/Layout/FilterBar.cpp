@@ -1,6 +1,11 @@
 #include "FilterBar.h"
 
+#include "Assets/AssetManager.h"
+
 #include "UI/Style.h"
+
+#include <Windows.h>
+#include <shobjidl.h>
 
 FilterBar::FilterBar( Vector2& _cursor_position, Vector2 _size )
 {
@@ -31,4 +36,46 @@ void FilterBar::draw( void )
 
 void FilterBar::packageAssets( void )
 {
+	// open windows dialog
+	CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
+
+	IFileSaveDialog* file_dialog;
+	IShellItem*      shell_item;
+
+	if( SUCCEEDED( CoCreateInstance( CLSID_FileSaveDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS( &file_dialog ) ) ) )
+	{
+		DWORD options;
+		if( SUCCEEDED( file_dialog->GetOptions( &options ) ) )
+			file_dialog->SetOptions( options );
+
+		COMDLG_FILTERSPEC filter_spec{};
+		filter_spec.pszName = L"StarHuddle Package File";
+		filter_spec.pszSpec = L"*.shp";
+
+		file_dialog->SetDefaultExtension( L"shp" );
+		file_dialog->SetFileTypes( 1, &filter_spec );
+
+		if( SUCCEEDED( file_dialog->Show( NULL ) ) )
+		{
+			if( SUCCEEDED( file_dialog->GetResult( &shell_item ) ) )
+			{
+				PWSTR file_path;
+				if( SUCCEEDED( shell_item->GetDisplayName( SIGDN_FILESYSPATH, &file_path ) ) )
+				{
+					auto wide_string = std::wstring( file_path );
+					auto converted_string = std::string( wide_string.begin(), wide_string.end() );
+					AssetManager::packageAssets( converted_string );
+					
+					CoTaskMemFree( file_path );
+				}
+				shell_item->Release();
+			}
+		}
+
+		file_dialog->Release();
+	}
+
+	CoUninitialize();
+
+
 }

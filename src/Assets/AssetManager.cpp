@@ -5,6 +5,8 @@
 #include "OGGAsset.h"
 
 #include "raylib.h"
+#include "json.hpp"
+#include "zstd.h"
 
 #include <io.h>
 #include <direct.h>
@@ -21,6 +23,7 @@ void AssetManager::importFile( const std::string& _path )
 	std::filesystem::path file_path            = _path;
 	auto                  millisec_since_epoch = duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now().time_since_epoch() ).count();
 	auto                  file_hash            = std::hash< uint8_t >{}( *payload.data * millisec_since_epoch * m_next_offset++ );
+
 	if( file_path.extension().string() == std::string( ".json" ) )
 		m_assets.push_back( std::make_shared< JSONAsset >( file_hash, file_path, payload.data, payload.data_size ) );
 	else if( file_path.extension().string() == std::string( ".tga" ) )
@@ -49,9 +52,21 @@ void AssetManager::exportAsset( size_t _hash, const std::string& _path )
 	saveFile( file_path, asset->getData(), asset->getDataSize() );
 }
 
-void AssetManager::packageAssets( void )
+void AssetManager::packageAssets( const std::string& _path )
 {
+	nlohmann::json package{};
 
+	for( auto asset : m_assets )
+		package.push_back( *asset.get() );
+
+	size_t comp_size       = ZSTD_compressBound( sizeof( package ) );
+	void*  comp_package    = malloc( comp_size );
+
+	auto compress_result = ZSTD_compress( comp_package, comp_size, &package, sizeof( package ), 1 );
+	if( ZSTD_isError( compress_result ) )
+		return; // TODO: Error
+
+	saveFile( _path, comp_package, comp_size );
 }
 
 std::shared_ptr< Asset > AssetManager::getAsset( size_t _hash )

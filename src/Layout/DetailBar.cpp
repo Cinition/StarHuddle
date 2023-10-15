@@ -116,9 +116,6 @@ void DetailBar::exportFile( void )
 		return; // can't export with no asset selected
 
 	// open windows dialog
-	std::filesystem::path path = std::filesystem::current_path();
-	char                  file_path_buffer[ 2048 ]{};
-
 	CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
 
 	IFileDialog* file_dialog;
