@@ -1,12 +1,14 @@
 #include "Button.h"
 
-Button::Button( Vector2& _cursor_position, Vector2 _size, callback_function _func )
-: m_position( _cursor_position )
+#include "raymath.h"
+
+#include "UI/Style.h"
+
+Button::Button( const std::string& _text, Vector2& _cursor_position, Vector2 _size, callback_function _func )
+: m_text( _text )
+, m_position( _cursor_position )
 , m_size( _size )
 , m_callback( _func )
-, m_normal_color( Color( 34, 189, 106, 255 ) )
-, m_hover_color( Color( 40, 227, 127, 255 ) )
-, m_selected_color( Color( 24, 138, 77, 255 ) )
 {
 	_cursor_position.y += _size.y;
 }
@@ -29,18 +31,31 @@ void Button::tick(void)
 
 void Button::draw( void )
 {
-	auto bg_color = m_normal_color;
+	auto bg_color = UI::PRIMARY;
 
-	if( m_pressed )      bg_color = m_selected_color;
-	else if( m_hovered ) bg_color = m_hover_color;
+	if( m_pressed )
+	{
+		auto pressed_color = ColorToHSV( bg_color );
+		pressed_color.z += 0.25f;
+		bg_color = ColorFromHSV( pressed_color.x, pressed_color.y, pressed_color.z );
+	}
+	else if( m_hovered )
+	{
+		auto hovered_color = ColorToHSV( bg_color );
+		hovered_color.z += 0.15f;
+		bg_color = ColorFromHSV( hovered_color.x, hovered_color.y, hovered_color.z );
+	}
 
 	Rectangle rectangle;
-	rectangle.x = m_position.x;
-	rectangle.y = m_position.y;
-	rectangle.width = m_size.x;
+	rectangle.x      = m_position.x;
+	rectangle.y      = m_position.y;
+	rectangle.width  = m_size.x;
 	rectangle.height = m_size.y;
 
 	DrawRectangleRounded( rectangle, 0.75f, 11, bg_color );
+
+	int font_size = 15;
+	DrawText( m_text.c_str(), m_position.x + ( m_size.x - MeasureText( m_text.c_str(), font_size ) ) / 2, m_position.y + ( m_size.y - font_size ) / 2, font_size, UI::TEXT_COLOR );
 }
 
 void Button::checkIfButtonPressed(Vector2 _cursor_position)

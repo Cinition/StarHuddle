@@ -20,6 +20,8 @@ public:
 	const auto& getType    ( void ) const { return m_type; }
 	const auto& getHash    ( void ) const { return m_hash; }
 	const auto& getMetaData( void ) const { return m_meta_data; }
+	const auto& getData    ( void ) const { return m_data; }
+	const auto& getDataSize( void ) const { return m_data_size; }
 
 protected:
 
@@ -31,5 +33,7 @@ protected:
 	Type                       m_type;
 	std::filesystem::path      m_path;
 	std::vector< std::string > m_meta_data;
+	void*                      m_data;
+	uint32_t                   m_data_size;
 
 };

@@ -2,12 +2,12 @@
 
 #include "Assets/Asset.h"
 
-class JSONAsset : public Asset
+class OGGAsset : public Asset
 {
 
 public:
 
-	JSONAsset( size_t _hash, const std::filesystem::path& _path, uint8_t* _data, uint32_t _data_size );
+	OGGAsset( size_t _hash, const std::filesystem::path& _path, uint8_t* _data, uint32_t _data_size );
 
 protected:
 
