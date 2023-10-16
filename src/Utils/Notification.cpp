@@ -9,10 +9,10 @@ Notification::Notification( const std::string& _text )
 : m_text( _text )
 {
 	float inner_width = m_popup_size.x - ( UI::MARGIN * 2 );
-	auto  text_size   = MeasureTextEx( GetFontDefault(), m_text.c_str(), m_font_size, 0.f );
-	float average_char_width = text_size.x / static_cast< int >( m_text.size() );
+	int   text_width         = MeasureText( m_text.c_str(), m_font_size );
+	float average_char_width = static_cast< float >( text_width ) / static_cast< int >( m_text.size() );
 
-	for( int i = 1; i < text_size.x / inner_width ; i++ )
+	for( int i = 1; i < text_width / inner_width ; i++ )
 	{
 		m_columns += 1;
 		m_text.insert( static_cast< size_t >( average_char_width * inner_width) , "\n" );
@@ -51,5 +51,5 @@ void Notification::draw( Vector2& _cursor_position )
 	DrawRectangleRounded( rect, 0.25f, 11, UI::ACCENT2 );
 
 	Vector2 text_pos = Vector2( _cursor_position.x + UI::MARGIN, _cursor_position.y + UI::MARGIN );
-	RaylibDrawText( m_text.c_str(), text_pos.x, text_pos.y, 10, UI::TEXT_COLOR );
+	RaylibDrawText( m_text.c_str(), static_cast< int >( text_pos.x ), static_cast< int >( text_pos.y ), 10, UI::TEXT_COLOR );
 }

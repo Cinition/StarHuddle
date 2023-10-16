@@ -5,6 +5,7 @@
 
 #include <Windows.h>
 #include <shobjidl.h>
+#include <codecvt>
 
 DetailBar::DetailBar( Vector2& _cursor_position, Vector2 _size )
 : UIElement( _cursor_position, _size )
@@ -20,10 +21,12 @@ void DetailBar::update(void)
 
 void DetailBar::drawNoSelection( void )
 {
-	int         font_size = 12;
-	std::string text      = "No assets selected";
+	int         font_size  = 12;
+	std::string text       = "No assets selected";
+	int         text_width = MeasureText( text.c_str(), font_size );
+	Vector2     text_pos  = Vector2( m_position.x + UI::MARGIN + ( m_inner_size.x - text_width ) / 2.f, m_position.y + ( ( m_inner_size.y - font_size ) / 2.f ) );
 
-	RaylibDrawText( text.c_str(), ( m_position.x + UI::MARGIN + ( ( m_inner_size.x - MeasureText( text.c_str(), font_size ) ) / 2 ) ), m_position.y + ( ( m_inner_size.y - font_size ) / 2 ), font_size, UI::TEXT_COLOR );
+	RaylibDrawText( text.c_str(), static_cast< int >( text_pos.x ), static_cast< int >( text_pos.y ), font_size, UI::TEXT_COLOR );
 }
 
 void DetailBar::drawAssetDetail( void )
@@ -49,7 +52,7 @@ void DetailBar::drawAssetDetail( void )
 	drawAssetName( cursor_position, asset->getName() );
 	cursor_position.y += UI::MARGIN / 2;
 
-	DrawRectangle( cursor_position.x, cursor_position.y, m_inner_size.x, 4, UI::PRIMARY );
+	DrawRectangle( static_cast< int >( cursor_position.x ), static_cast< int >( cursor_position.y ), static_cast< int >( m_inner_size.x ), 4, UI::PRIMARY );
 	cursor_position.y += 4 + UI::MARGIN / 2;
 
 	for( auto& meta_data : asset->getMetaData() )
@@ -60,15 +63,15 @@ void DetailBar::drawAssetDetail( void )
 void DetailBar::drawAssetIcon( Vector2& _cursor_position, Texture2D _icon )
 {
 	RaylibRectangle texture_rect;
-	texture_rect.x = 0.f;
-	texture_rect.y = 0.f;
-	texture_rect.width = _icon.width;
-	texture_rect.height = _icon.height;
+	texture_rect.x      = 0.f;
+	texture_rect.y      = 0.f;
+	texture_rect.width  = static_cast< float >( _icon.width );
+	texture_rect.height = static_cast< float >( _icon.height );
 
 	RaylibRectangle rect;
-	rect.x = _cursor_position.x + ( m_inner_size.x - texture_rect.width ) / 2;
-	rect.y = _cursor_position.y;
-	rect.width = texture_rect.width;
+	rect.x      = _cursor_position.x + ( m_inner_size.x - texture_rect.width ) / 2;
+	rect.y      = _cursor_position.y;
+	rect.width  = texture_rect.width;
 	rect.height = texture_rect.height;
 
 	DrawTexturePro( _icon, texture_rect, rect, { 0.f, 0.f }, 0.f, WHITE );
@@ -80,25 +83,24 @@ void DetailBar::drawAssetName( Vector2& _cursor_position, const std::string& _te
 	int     font_size  = 16;
 	int     text_width = MeasureText( _text.c_str(), font_size );
 	Vector2 text_pos   = Vector2( _cursor_position.x + ( m_inner_size.x - text_width ) / 2, _cursor_position.y );
-	RaylibDrawText( _text.c_str(), text_pos.x, text_pos.y, font_size, UI::TEXT_COLOR );
+	RaylibDrawText( _text.c_str(), static_cast< int >( text_pos.x ), static_cast< int >( text_pos.y ), font_size, UI::TEXT_COLOR );
 	_cursor_position.y += font_size;
 }
 
 void DetailBar::drawMetaData( Vector2& _cursor_position, const Asset::MetaData& _meta_data )
 {
-	int     font_size        = 12;
-	int     name_width      = MeasureText( _meta_data.name.c_str(), font_size );
+	int     font_size       = 12;
 	int     data_width      = MeasureText( _meta_data.data.c_str(), font_size );
 	Vector2 name_pos        = Vector2( _cursor_position.x, _cursor_position.y );
 	Vector2 data_pos        = Vector2( _cursor_position.x + m_inner_size.x - data_width, _cursor_position.y );
 
-	RaylibDrawText( _meta_data.name.c_str(), name_pos.x, name_pos.y, font_size, UI::TEXT_COLOR );
-	RaylibDrawText( _meta_data.data.c_str(), data_pos.x, data_pos.y, font_size, UI::TEXT_COLOR );
+	RaylibDrawText( _meta_data.name.c_str(), static_cast< int >( name_pos.x ), static_cast< int >( name_pos.y ), font_size, UI::TEXT_COLOR );
+	RaylibDrawText( _meta_data.data.c_str(), static_cast< int >( data_pos.x ), static_cast< int >( data_pos.y ), font_size, UI::TEXT_COLOR );
 
-	_cursor_position.y += font_size;
+	_cursor_position.y += static_cast< float >( font_size );
 }
 
-void DetailBar::drawInner( Vector2 _cursor_position )
+void DetailBar::drawInner( Vector2 /*_cursor_position*/ )
 {
 	AssetManager asset_manager;
 	if( asset_manager.getAssetSelection().empty() )
@@ -136,8 +138,10 @@ void DetailBar::exportFile( void )
 				{
 					for( auto& selected_asset_hash : asset_manager.getAssetSelection() )
 					{
-						auto wide_string = std::wstring( file_path );
-						auto converted_string = std::string( wide_string.begin(), wide_string.end() );
+						std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
+						
+						auto wide_string      = std::wstring( file_path );
+						auto converted_string = converter.to_bytes( wide_string );
 						asset_manager.exportAsset( selected_asset_hash, converted_string );
 					}
 					CoTaskMemFree( file_path );

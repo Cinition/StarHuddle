@@ -114,10 +114,10 @@ void AssetFrame::drawIcon( Vector2& _cursor_position )
 	}
 
 	RaylibRectangle texture_rect;
-	texture_rect.x = 0.f;
-	texture_rect.y = 0.f;
-	texture_rect.width = asset_texture.width;
-	texture_rect.height = asset_texture.height;
+	texture_rect.x      = 0.f;
+	texture_rect.y      = 0.f;
+	texture_rect.width  = static_cast< float >( asset_texture.width );
+	texture_rect.height = static_cast< float >( asset_texture.height );
 
 	RaylibRectangle rect;
 	rect.x = _cursor_position.x;
@@ -139,34 +139,32 @@ void AssetFrame::drawTitle( Vector2& _cursor_position )
 	else
 		title = asset->getName();
 
-	int         column_count    = 1;
-	int         font_size       = 12;
-	Font        font            = GetFontDefault();
-	Vector2     title_size      = MeasureTextEx( font, title.c_str(), font_size, 0.f );
-	float       available_width = m_size.x - ( UI::MARGIN * 2 );
+	int   column_count    = 1;
+	int   font_size       = 12;
+	int   title_width     = MeasureText( title.c_str(), font_size );
+	float available_width = m_size.x - ( UI::MARGIN * 2 );
 
 	std::string formatted_text = title;
-	if( title_size.x > available_width )
+	if( title_width > available_width )
 	{
 		// Rough wrapping calculation
-		float average_char_width = title_size.x / static_cast< int >( formatted_text.size() );
-		column_count             += static_cast< int >( title_size.x / available_width );
-		title_size.y             = font_size * column_count;
+		float average_char_width = static_cast< float >( title_width ) / static_cast< int >( formatted_text.size() );
+		column_count             += static_cast< int >( title_width / available_width );
 		for (int i = 0; i < column_count; i++)
 		{
 			auto rough_row_count = available_width / average_char_width;
-			auto row_string      = formatted_text.substr( rough_row_count * i, rough_row_count * ( i + 1 ) );
+			auto row_string      = formatted_text.substr( static_cast< size_t >( rough_row_count * i, rough_row_count * ( i + 1 ) ) );
 			auto line_width      = static_cast< int >( row_string.size() ) * average_char_width;
 
-			RaylibDrawText( row_string.c_str(), _cursor_position.x + ( ( available_width - line_width ) / 2 ), _cursor_position.y + ( font_size * i ), font_size, WHITE );
-			_cursor_position.y += font_size;
+			RaylibDrawText( row_string.c_str(), static_cast< int >( _cursor_position.x + ( available_width - line_width ) / 2 ), static_cast< int >( _cursor_position.y + ( font_size * i ) ), font_size, WHITE );
+			_cursor_position.y += static_cast< float >( font_size );
 		}
 		_cursor_position.y += UI::MARGIN / 2;
 	}
 	else
 	{
-		_cursor_position.x += ( ( available_width - title_size.x ) / 2 );
-		RaylibDrawText( formatted_text.c_str(), _cursor_position.x, _cursor_position.y, font_size, WHITE );
+		_cursor_position.x += ( ( available_width - title_width ) / 2 );
+		RaylibDrawText( formatted_text.c_str(), static_cast< int >( _cursor_position.x ), static_cast< int >( _cursor_position.y ), font_size, WHITE );
 		_cursor_position.y += font_size;
 		_cursor_position.y += UI::MARGIN / 2;
 	}
@@ -181,7 +179,7 @@ void AssetFrame::drawSelected( Vector2& _cursor_position )
 	rect.height = m_selection_square_size.y;
 
 	if( m_selected )
-		DrawRectangle( rect.x, rect.y, rect.width, rect.height, UI::PRIMARY );
+		DrawRectangle( static_cast< int >( rect.x ), static_cast< int >( rect.y ), static_cast< int >( rect.width ), static_cast< int >( rect.height ), UI::PRIMARY );
 	else
 		DrawRectangleLinesEx( rect, 5, UI::PRIMARY );
 }

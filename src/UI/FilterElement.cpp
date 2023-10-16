@@ -22,10 +22,12 @@ void FilterElement::drawInner( Vector2 _cursor_positions )
 		drawNotFocused( _cursor_positions );
 }
 
-void FilterElement::drawFocused( Vector2 _cursor_position )
+void FilterElement::drawFocused( Vector2 /*_cursor_position*/ )
 {
+	// TODO: implement filter system
 }
 
-void FilterElement::drawNotFocused( Vector2 _cursor_position )
+void FilterElement::drawNotFocused( Vector2 /*_cursor_position*/ )
 {
+	// TODO: implement filter system
 }

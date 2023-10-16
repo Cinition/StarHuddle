@@ -31,7 +31,7 @@ public:
 private:
 
 	static file_payload loadFile( const std::string& _path );
-	static void         saveFile( const std::string& _path, void* _data, uint32_t _data_size);
+	static void         saveFile( const std::string& _path, void* _data, size_t _data_size);
 
 	inline static std::vector< size_t >                   m_selected_assets;
 	inline static std::vector< std::shared_ptr< Asset > > m_assets;

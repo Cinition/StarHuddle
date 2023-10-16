@@ -1,12 +1,12 @@
-cppdialect "C++20"
-language "C++"
+language      "C++"
+cppdialect    "C++20"
 staticruntime "off"
-
+warnings      "Extra"
 
 defines {
-    "_CRT_SECURE_NO_WARNINGS"
+    "_CRT_SECURE_NO_WARNINGS",
+    "_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING",
 }
-
 
 filter "configurations:Debug"
     runtime "Debug"
@@ -77,6 +77,10 @@ workspace "StarHuddle"
         kind "WindowedApp"
         location ( "build" )
         targetdir( "bin" )
+
+        flags {
+            "FatalWarnings",
+        }
 
         files {
             "src/**.h",

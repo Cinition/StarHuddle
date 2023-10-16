@@ -22,7 +22,7 @@ void AssetManager::importFile( const std::string& _path )
 
 	std::filesystem::path file_path            = _path;
 	auto                  millisec_since_epoch = duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now().time_since_epoch() ).count();
-	auto                  file_hash            = std::hash< uint8_t >{}( *payload.data * millisec_since_epoch * m_next_offset++ );
+	auto                  file_hash            = std::hash< uint64_t >{}( millisec_since_epoch * ( *payload.data ) * m_next_offset++ );
 
 	if( file_path.extension().string() == std::string( ".json" ) )
 		m_assets.push_back( std::make_shared< JSONAsset >( file_hash, file_path, payload.data, payload.data_size ) );
@@ -117,35 +117,35 @@ bool AssetManager::hasAssetsUpdated( void )
 
 AssetManager::file_payload AssetManager::loadFile( const std::string& _path )
 {
-	const int32_t file_handle = open( _path.c_str(), 0x0000, 0777 );
+	auto file_handle = _open( _path.c_str(), 0x0000, 0777 );
 	if( file_handle < 1 )
 		return {}; // TODO: error popup
 
-	const uint32_t data_size = lseek( file_handle, 0, 2 );
+	auto data_size = _lseek( file_handle, 0, 2 );
 	if( data_size == 0 )
 		return {}; // TODO: error popup
 
-	lseek( file_handle, 0, 0 ); // seek back to beginning
+	_lseek( file_handle, 0, 0 ); // seek back to beginning
 	uint8_t* data = new uint8_t[ data_size ];
 	if( !data )
 		return {}; // TODO: error popup
 
-	read( file_handle, data, data_size );
-	close( file_handle );
+	_read( file_handle, data, data_size );
+	_close( file_handle );
 
-	return { data, data_size };
+	return { data, static_cast< uint32_t >( data_size ) };
 }
 
-void AssetManager::saveFile( const std::string& _path, void* _data, uint32_t _data_size )
+void AssetManager::saveFile( const std::string& _path, void* _data, size_t _data_size )
 {
-	const int32_t file_handle = open( _path.c_str(), 0x0001 | 0x0100 | 0x0200 | 0x8000, 0777 );
+	const int32_t file_handle = _open( _path.c_str(), 0x0001 | 0x0100 | 0x0200 | 0x8000, 0777 );
 	if( file_handle < 1 )
 		return; // TODO: error popup
 
 	uint8_t*   data         = static_cast< uint8_t* >( _data );
-	const auto written_data = write( file_handle, data, _data_size );
+	const auto written_data = _write( file_handle, data, static_cast< unsigned int >( _data_size ) );
 	if( written_data == 0 )
 		return; // TODO: error popup
 
-	close( file_handle );
+	_close( file_handle );
 }

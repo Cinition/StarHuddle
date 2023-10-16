@@ -10,7 +10,7 @@ int WinMain(void)
 {
 	AssetManager asset_manager;
 
-	InitWindow( UI::SCREEN_SIZE.x, UI::SCREEN_SIZE.y, "StarHuddle");
+	InitWindow( static_cast< int >( UI::SCREEN_SIZE.x ), static_cast< int >( UI::SCREEN_SIZE.y ), "StarHuddle" );
 
 	auto      full_inner_size = Vector2( UI::SCREEN_SIZE.x - ( UI::MARGIN * 2 ), UI::SCREEN_SIZE.y - ( UI::MARGIN * 2 ) );
 
@@ -35,7 +35,7 @@ int WinMain(void)
 		{
 			auto dropped_files = LoadDroppedFiles();
 
-			for( int i = 0; i < dropped_files.count; i++ )
+			for( unsigned int i = 0; i < dropped_files.count; i++ )
 			{
 				auto file_path = std::string( dropped_files.paths[ i ] );
 				asset_manager.importFile( file_path );

@@ -11,13 +11,13 @@ namespace UI
 	constexpr Vector2 SCREEN_SIZE      = Vector2( 1470.f, 870.f );
 
 	// Colors
-	constexpr Color   PRIMARY          = Color( 182.f, 25.f, 91.f, 255.f );
-	constexpr Color   ACCENT1          = Color( 57.f, 57.f, 57.f, 255.f );
-	constexpr Color   ACCENT2          = Color( 77.f, 77.f, 77.f, 255.f );
-	constexpr Color   ACCENT3          = Color( 97.f, 97.f, 97.f, 255.f );
-	constexpr Color   ACCENT4          = Color( 107.f, 107.f, 107.f, 255.f );
-	constexpr Color   TEXT_COLOR       = Color( 210.f, 210.f, 210.f, 255.f );
+	constexpr Color   PRIMARY          = Color( 182, 25, 91, 255 );
+	constexpr Color   ACCENT1          = Color( 57, 57, 57, 255 );
+	constexpr Color   ACCENT2          = Color( 77, 77, 77, 255 );
+	constexpr Color   ACCENT3          = Color( 97, 97, 97, 255 );
+	constexpr Color   ACCENT4          = Color( 107, 107, 107, 255 );
+	constexpr Color   TEXT_COLOR       = Color( 210, 210, 210, 255 );
 
-	inline float getCornerRoundness( Vector2 _element_size ) { return ( UI::CORNER_ROUNDNESS / fmin( _element_size.x, _element_size.y ) ); }
+	inline float getCornerRoundness( Vector2 _element_size ) { return UI::CORNER_ROUNDNESS / fminf( _element_size.x, _element_size.y ); }
 
 }

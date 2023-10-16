@@ -17,7 +17,7 @@ OGGAsset::OGGAsset( size_t _hash, const std::filesystem::path& _path, uint8_t* _
 	createMetaData();
 }
 
-void OGGAsset::handleData( uint8_t* _data )
+void OGGAsset::handleData( uint8_t* /*_data*/ )
 {
 	// Implement Vorbig OGG headerpage reading
 }

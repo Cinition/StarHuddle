@@ -21,7 +21,7 @@ void UIElement::draw( void )
 	rect.width = m_size.x;
 	rect.height = m_size.y;
 
-	float pixel_percentage = m_roundness / fmin( m_size.x, m_size.y );
+	float pixel_percentage = m_roundness / fminf( m_size.x, m_size.y );
 
 	DrawRectangleRounded( rect, pixel_percentage, 11, ( m_if_focused ? UI::ACCENT4 : UI::ACCENT2 ) );
 

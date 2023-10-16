@@ -6,6 +6,7 @@
 
 #include <Windows.h>
 #include <shobjidl.h>
+#include <codecvt>
 
 FilterBar::FilterBar( Vector2& _cursor_position, Vector2 _size )
 {
@@ -62,10 +63,12 @@ void FilterBar::packageAssets( void )
 				PWSTR file_path;
 				if( SUCCEEDED( shell_item->GetDisplayName( SIGDN_FILESYSPATH, &file_path ) ) )
 				{
-					auto wide_string = std::wstring( file_path );
-					auto converted_string = std::string( wide_string.begin(), wide_string.end() );
-					AssetManager::packageAssets( converted_string );
+					std::wstring_convert< std::codecvt_utf8< wchar_t > > converter;
 					
+					auto wide_string      = std::wstring( file_path );
+					auto converted_string = converter.to_bytes( wide_string );
+					AssetManager::packageAssets( converted_string );
+
 					CoTaskMemFree( file_path );
 				}
 				shell_item->Release();

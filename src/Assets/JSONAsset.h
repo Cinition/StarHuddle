@@ -11,7 +11,7 @@ public:
 
 protected:
 
-	void handleData    ( uint8_t* _data ){};
+	void handleData( uint8_t* /*_data*/ ){};
 	void createMetaData( void );
 
 };
