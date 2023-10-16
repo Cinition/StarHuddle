@@ -1,5 +1,6 @@
 #include "UI/Style.h"
 #include "Assets/AssetManager.h"
+#include "Utils/NotificationManager.h"
 #include "Layout/FilterBar.h"
 #include "Layout/DetailBar.h"
 #include "Layout/AssetGrid.h"
@@ -8,7 +9,8 @@
 
 int WinMain(void)
 {
-	AssetManager asset_manager;
+	AssetManager        asset_manager;
+	NotificationManager notification_manager;
 
 	InitWindow( static_cast< int >( UI::SCREEN_SIZE.x ), static_cast< int >( UI::SCREEN_SIZE.y ), "StarHuddle" );
 
@@ -44,6 +46,7 @@ int WinMain(void)
 			UnloadDroppedFiles( dropped_files );
 		}
 
+		notification_manager.update();
 		filter_bar.update();
 		asset_grid.update();
 		detail_bar.update();
@@ -58,6 +61,7 @@ int WinMain(void)
 		asset_grid.draw();
 		filter_bar.draw();
 		detail_bar.draw();
+		notification_manager.draw();
 
 		EndDrawing();
 	}

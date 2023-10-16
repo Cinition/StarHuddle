@@ -19,10 +19,9 @@ public:
 private:
 
 	std::string m_text;
-	Vector2     m_popup_size         = Vector2( 250, 80 );
-	int         m_font_size          = 10;
+	Vector2     m_popup_size         = Vector2( 275, 50 );
+	int         m_font_size          = 16;
 	int         m_columns            = 1;
 	float       m_notification_timer = 0.f;
-	bool        m_fade               = false;
 
 };

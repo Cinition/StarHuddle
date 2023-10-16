@@ -3,6 +3,8 @@
 #include "JSONAsset.h"
 #include "TGAAsset.h"
 #include "OGGAsset.h"
+#include "Utils/NotificationManager.h"
+#include "Utils/StringHelper.h"
 
 #include "raylib.h"
 #include "json.hpp"
@@ -18,7 +20,11 @@ void AssetManager::importFile( const std::string& _path )
 {
 	auto payload = loadFile( _path );
 	if( !payload.data )
-		return; // TODO: error popup
+	{
+		NotificationManager::addNotification( { "Failed to get data from file." } );
+		return;
+	}
+
 
 	std::filesystem::path file_path            = _path;
 	auto                  millisec_since_epoch = duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now().time_since_epoch() ).count();
@@ -31,15 +37,17 @@ void AssetManager::importFile( const std::string& _path )
 	else if( file_path.extension().string() == std::string( ".ogg" ) )
 		m_assets.push_back( std::make_shared< OGGAsset >( file_hash, file_path, payload.data, payload.data_size ) );
 	else
-		return; // TODO: error popup
-
+		NotificationManager::addNotification( { "You are trying to insert a file that is not supported!" } );
 }
 
 void AssetManager::exportAsset( size_t _hash, const std::string& _path )
 {
 	auto asset = getAsset( _hash );
 	if( !asset )
-		return; // TODO: error popup
+	{
+		NotificationManager::addNotification( { "You are trying to export an asset that is unavailable." } );
+		return;
+	}
 
 	std::string file_path = _path + "\\" + asset->getName();
 	if( asset->getType() == Asset::Type::JSON )
@@ -64,7 +72,10 @@ void AssetManager::packageAssets( const std::string& _path )
 
 	auto compress_result = ZSTD_compress( comp_package, comp_size, &package, sizeof( package ), 1 );
 	if( ZSTD_isError( compress_result ) )
-		return; // TODO: Error
+	{
+		NotificationManager::addNotification( { StringHelper::format( "Something went wrong with compression: %s", ZSTD_getErrorName( compress_result ) ) } );
+		return;
+	}
 
 	saveFile( _path, comp_package, comp_size );
 }
@@ -119,16 +130,16 @@ AssetManager::file_payload AssetManager::loadFile( const std::string& _path )
 {
 	auto file_handle = _open( _path.c_str(), 0x0000, 0777 );
 	if( file_handle < 1 )
-		return {}; // TODO: error popup
+		return {};
 
 	auto data_size = _lseek( file_handle, 0, 2 );
 	if( data_size == 0 )
-		return {}; // TODO: error popup
+		return {};
 
-	_lseek( file_handle, 0, 0 ); // seek back to beginning
+	_lseek( file_handle, 0, 0 );
 	uint8_t* data = new uint8_t[ data_size ];
 	if( !data )
-		return {}; // TODO: error popup
+		return {};
 
 	_read( file_handle, data, data_size );
 	_close( file_handle );
@@ -140,12 +151,12 @@ void AssetManager::saveFile( const std::string& _path, void* _data, size_t _data
 {
 	const int32_t file_handle = _open( _path.c_str(), 0x0001 | 0x0100 | 0x0200 | 0x8000, 0777 );
 	if( file_handle < 1 )
-		return; // TODO: error popup
+		return;
 
 	uint8_t*   data         = static_cast< uint8_t* >( _data );
 	const auto written_data = _write( file_handle, data, static_cast< unsigned int >( _data_size ) );
 	if( written_data == 0 )
-		return; // TODO: error popup
+		return;
 
 	_close( file_handle );
 }

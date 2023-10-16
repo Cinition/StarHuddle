@@ -9,7 +9,10 @@ void NotificationManager::update( void )
 	for( auto notif_it = m_notifications.begin(); notif_it != m_notifications.end(); notif_it++ )
 	{
 		if( !notif_it->alive )
+		{
 			m_notifications.erase( notif_it );
+			break;
+		}
 	}
 
 	for( auto& notification : m_notifications )
