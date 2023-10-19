@@ -51,19 +51,19 @@ void UIUtil::drawText( const char* _text, Vector2 _position, int _font_size, Col
 	RaylibDrawText( _text, static_cast< int >( _position.x ), static_cast< int >( _position.y ), _font_size, _color );
 }
 
-void UIUtil::drawTexture( Vector2 _position, Vector2 _size, Texture2D _texture )
+void UIUtil::drawTexture( Vector2 _position, Vector2 _size, Texture2D _texture, bool _invert )
 {
 	RaylibRectangle src_rect;
 	src_rect.x      = 0.f;
 	src_rect.y      = 0.f;
-	src_rect.height = static_cast< float >( _texture.height );
+	src_rect.height = static_cast< float >( ( _invert ? -_texture.height : _texture.height ) );
 	src_rect.width  = static_cast< float >( _texture.width );
 
 	RaylibRectangle dst_rect;
 	dst_rect.x      = _position.x;
 	dst_rect.y      = _position.y;
-	dst_rect.height = _size.x;
-	dst_rect.width  = _size.y;
+	dst_rect.height = _size.y;
+	dst_rect.width  = _size.x;
 
 	DrawTexturePro( _texture, src_rect, dst_rect, { 0.f, 0.f }, 0, WHITE );
 }

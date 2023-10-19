@@ -11,8 +11,10 @@ AssetFrame::AssetFrame( Vector2& _frame_position, Vector2 _frame_size, std::weak
 : UIElement( _frame_position, _frame_size )
 , m_asset( std::move( _asset ) )
 {
-	int total_text_width = MeasureText( m_asset.lock()->getName().c_str(), UI::FRAME_FONT_SIZE );
-	m_size.y += static_cast< float >( total_text_width * UI::FRAME_FONT_SIZE );
+
+	auto asset_titel       = m_asset.lock()->getName();
+	int  text_column_count = static_cast< int >( MeasureText( asset_titel.c_str(), UI::FRAME_FONT_SIZE ) / ( m_size.x - UI::MARGIN * 2 ) );
+	m_size.y += UI::FRAME_FONT_SIZE * text_column_count;
 }
 
 void AssetFrame::updateOffsets( const float _scroll_offset, const float _row_offset )
@@ -56,7 +58,7 @@ void AssetFrame::draw( void )
 	Texture2D icon  = locked_asset->getIcon();
 	UIUtil::drawTexture( cursor_position, Vector2( static_cast< float >( icon.width ), static_cast< float >( icon.height ) ), icon );
 
-	cursor_position = Vector2Add( cursor_position, Vector2( -UI::MARGIN / 2, UI::MARGIN / 2 ) );
+	cursor_position = Vector2Add( cursor_position, Vector2( -UI::MARGIN / 2, icon.height + UI::MARGIN / 2 ) );
 	UIUtil::drawTextCentered( locked_asset->getName().c_str(), cursor_position, Vector2Subtract( m_size, Vector2( UI::MARGIN, UI::MARGIN ) ).x, 16, UI::TEXT_COLOR );
 
 	cursor_position = Vector2Add( m_position, Vector2( m_size.x - UI::MARGIN / 2 - m_selection_square_size.x, m_scroll_offset + UI::MARGIN / 2 ) );

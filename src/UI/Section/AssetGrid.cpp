@@ -5,24 +5,31 @@
 #include "Util/UIUtil.h"
 #include "Manager/AssetManager.h"
 
+constexpr int   FRAME_ROW_COUNT    = 7;
+constexpr float FRAME_ASPECT_RATIO = 1.5f;
+constexpr float SCROLL_MULTIPLIER  = 20.f;
+
 AssetGrid::AssetGrid( const Vector2& _position, const Vector2& _size )
 : UIElement( _position, _size )
 {
 	Vector2 inner_size   = Vector2Subtract( m_size, Vector2( UI::MARGIN * 2, UI::MARGIN * 2 ) );
 	m_grid_render_target = LoadRenderTexture( static_cast< int >( inner_size.x ), static_cast< int >( inner_size.y ) );
+
+	auto frame_width     = ( ( _size.x - ( UI::MARGIN * ( FRAME_ROW_COUNT + 1 ) ) ) / FRAME_ROW_COUNT );
+	m_frame_size         = Vector2( frame_width, frame_width * FRAME_ASPECT_RATIO );
 }
 
 void AssetGrid::update( const float _tick )
 {
 	updateAssetGrid( _tick );
 	updateScrollOffset();
+	drawAssetGrid();
 }
 
 void AssetGrid::draw( void )
 {
 	UIUtil::drawBackground( m_position, m_size, UI::GRADIENT1 );
-	drawAssetGrid();
-	UIUtil::drawTexture( Vector2Add( m_position, Vector2( UI::MARGIN, UI::MARGIN ) ), Vector2Subtract( m_size, Vector2( UI::MARGIN, UI::MARGIN ) ), m_grid_render_target.texture );
+	UIUtil::drawTexture( Vector2Add( m_position, Vector2( UI::MARGIN, UI::MARGIN ) ), Vector2Subtract( m_size, Vector2( UI::MARGIN, UI::MARGIN ) ), m_grid_render_target.texture, true );
 }
 
 void AssetGrid::updateScrollOffset( void )
@@ -81,6 +88,8 @@ void AssetGrid::updateAssetGrid( const float _tick )
 
 	for( auto& asset : m_asset_frames )
 	{
+		row_max_height = fmaxf( row_max_height, asset.getSize().y );
+
 		if( asset_index == ( m_asset_frames.size() - 1 ) )
 			m_asset_grid_size.y += row_max_height;
 		else if( ( asset_index > 0 && asset_index % m_frame_count == 0 ))
@@ -94,8 +103,6 @@ void AssetGrid::updateAssetGrid( const float _tick )
 
 		asset.updateOffsets( m_scroll_offset, prev_row_max_height );
 		asset.update( _tick );
-
-		row_max_height = fmaxf( row_max_height, asset.getSize().y );
 		asset_index += 1;
 	}
 }
