@@ -11,7 +11,6 @@ AssetFrame::AssetFrame( Vector2& _frame_position, Vector2 _frame_size, std::weak
 : UIElement( _frame_position, _frame_size )
 , m_asset( std::move( _asset ) )
 {
-
 	auto asset_titel       = m_asset.lock()->getName();
 	int  text_column_count = static_cast< int >( MeasureText( asset_titel.c_str(), UI::FRAME_FONT_SIZE ) / ( m_size.x - UI::MARGIN * 2 ) );
 	m_size.y += UI::FRAME_FONT_SIZE * text_column_count;

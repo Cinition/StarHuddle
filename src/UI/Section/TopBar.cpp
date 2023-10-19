@@ -35,8 +35,18 @@ void TopBar::packageAssets( void )
 
 void TopBar::importFile( void )
 {
+	//open dialog
 }
 
 void TopBar::exportFile( void )
 {
+	AssetManager asset_manager;
+	if( asset_manager.getAssetSelection().size() > 1 )
+	{
+		// open dialog for folders
+	}
+	else
+	{
+		// open dialog for files
+	}
 }

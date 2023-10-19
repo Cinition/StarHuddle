@@ -84,14 +84,21 @@ void AssetDetail::drawAssetDetail( void )
 	if( !asset )
 		return;
 
+	// Icon
 	Vector2 inner_size = Vector2Subtract( m_size, Vector2( UI::MARGIN * 2, UI::MARGIN * 2 ) );
 	UIUtil::drawTexture( LAYOUT::ASSETDETAIL::ASSET_ICON_POS, LAYOUT::ASSETDETAIL::ASSET_ICON_SIZE, asset->getIcon() );
-	UIUtil::drawTextCentered( asset->getName().c_str(), Vector2Add( m_position, Vector2( 0.f, LAYOUT::ASSETDETAIL::ASSET_ICON_SIZE.y + UI::MARGIN ) ), inner_size.x, 16, UI::TEXT_COLOR );
-	
-	Vector2 cursor_position = Vector2Add( LAYOUT::ASSETDETAIL::ASSET_ICON_POS, Vector2( 0.f, LAYOUT::ASSETDETAIL::ASSET_ICON_SIZE.y + UI::MARGIN / 2 ) );
+
+	// Titel
+	Vector2 text_size = LAYOUT::ASSETDETAIL::ASSET_NAME_SIZE;
+	UIUtil::drawTextCentered( asset->getName().c_str(), LAYOUT::ASSETDETAIL::ASSET_NAME_POS, text_size.x, 16, UI::TEXT_COLOR );
+	int  text_column_count = 1 + static_cast< int >( MeasureText( asset->getName().c_str(), 16 ) / text_size.x );
+
+	// Line
+	Vector2 cursor_position = Vector2Add( LAYOUT::ASSETDETAIL::ASSET_NAME_POS, Vector2( 0.f, static_cast< float >( 16 * text_column_count ) ) );
 	drawHorizontalLine( cursor_position );
 	cursor_position.y += UI::MARGIN / 2;
 
+	// Meta Data
 	for( auto& meta_data : asset->getMetaData() )
 		drawMetaData( meta_data, cursor_position );
 
