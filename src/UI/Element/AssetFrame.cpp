@@ -2,6 +2,7 @@
 
 #include "Manager/AssetManager.h"
 #include "UI/Style.h"
+#include "UI/Layout.h"
 #include "Util/UIUtil.h"
 #include "Util/InputUtil.h"
 
@@ -28,7 +29,8 @@ void AssetFrame::update( const float /*_tick*/ )
 	if( !locked_asset )
 		return;
 
-	if( IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
+	Vector2 absolution_position = Vector2Add( m_position, Vector2( LAYOUT::ASSETGRID_POS ) );
+	if( InputUtil::isMouseInside( Vector2Add( absolution_position, Vector2( 0.f, m_row_offset + m_scroll_offset ) ), Vector2Add( absolution_position, Vector2Add( m_size, Vector2( 0.f, m_row_offset + m_scroll_offset ) ) ) ) && IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
 		AssetManager::addSelection( locked_asset->getHash() );
 
 	auto selection_vector = AssetManager::getAssetSelection();
