@@ -1,5 +1,6 @@
 #include "App.h"
 
+#include "Manager/AssetManager.h"
 #include "UI/Layout.h"
 #include "UI/Style.h"
 
@@ -7,6 +8,23 @@ App::App( void )
 : m_asset_detail( LAYOUT::ASSETDETAIL::POS, LAYOUT::ASSETDETAIL::SIZE )
 , m_asset_grid( LAYOUT::ASSETGRID_POS, LAYOUT::ASSETGRID_SIZE )
 {
+}
+
+void App::handleDragIn( void )
+{
+	if( IsFileDropped() )
+	{
+		AssetManager asset_manager;
+		auto dropped_files = LoadDroppedFiles();
+
+		for( unsigned int i = 0; i < dropped_files.count; i++ )
+		{
+			auto file_path = std::string( dropped_files.paths[ i ] );
+			asset_manager.importFile( file_path );
+		}
+
+		UnloadDroppedFiles( dropped_files );
+	}
 }
 
 void App::update( const float _tick )

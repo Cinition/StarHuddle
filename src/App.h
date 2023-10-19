@@ -13,12 +13,11 @@ public:
 
 	App( void );
 
-	void update( const float _tick );
-	void draw  ( void );
+	void handleDragIn( void );
+	void update      ( const float _tick );
+	void draw        ( void );
 
 private:
-
-	Vector2 m_screen_size = { 1470.f, 870.f };
 
 	AssetDetail         m_asset_detail;
 	AssetGrid           m_asset_grid;

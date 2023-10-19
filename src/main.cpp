@@ -12,6 +12,7 @@ int WinMain(void)
 
 	while (!WindowShouldClose())
 	{
+		app.handleDragIn();
 		app.update( GetFrameTime() );
 		app.draw();
 	}
