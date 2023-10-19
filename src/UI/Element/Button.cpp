@@ -12,11 +12,12 @@ Button::Button( const std::string& _text, const Vector2& _position, const Vector
 {
 }
 
-Button::Button( Texture2D _icon, const Vector2& _position, const Vector2& _size, callback_function _func )
+Button::Button( Texture2D _icon, Vector2 _icon_size, const Vector2& _position, const Vector2& _size, callback_function _func )
 : UIElement( _position, _size )
 , m_callback( _func )
 , m_bg_color( UI::PRIMARY )
 , m_icon( _icon )
+, m_icon_size( _icon_size )
 {
 }
 
@@ -68,7 +69,8 @@ void Button::draw( void )
 	}
 	else
 	{
-		UIUtil::drawTexture( m_position, m_size, m_icon );
+		Vector2 center_position = Vector2Add( m_position, Vector2( ( m_size.x - m_icon_size.x ) / 2, ( m_size.y - m_icon_size.y ) / 2 ) );
+		UIUtil::drawTexture( center_position, m_icon_size, m_icon );
 	}
 
 }

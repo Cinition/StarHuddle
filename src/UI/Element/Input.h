@@ -21,8 +21,10 @@ private:
 	void        drawInputCursor( Vector2 _inner_position );
 
 	Color       m_bg_color;
-	std::string m_input_text   = "";
-	uint32_t    m_input_cursor = 0;
-	bool        m_focused      = false;
+	Texture2D   m_search_icon;
+	Vector2     m_search_icon_size = { 22.5f, 22.5f };
+	std::string m_input_text       = "";
+	uint32_t    m_input_cursor     = 0;
+	bool        m_focused          = false;
 
 };

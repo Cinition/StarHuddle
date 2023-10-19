@@ -7,8 +7,8 @@
 TopBar::TopBar( void )
 : UIElement( Vector2( 0.f, 0.f ), Vector2( 0.f, 0.f ) )
 , m_package_button( "Package", LAYOUT::TOPBAR::PACKAGE_POS, LAYOUT::TOPBAR::PACKAGE_SIZE, TopBar::packageAssets )
-, m_import_button( LoadTexture( "../data/textures/ImportIcon.png" ), LAYOUT::TOPBAR::IMPORT_POS, LAYOUT::TOPBAR::IMPORT_SIZE, TopBar::importFile )
-, m_export_button( LoadTexture( "../data/textures/ExportIcon.png" ), LAYOUT::TOPBAR::EXPORT_POS, LAYOUT::TOPBAR::EXPORT_SIZE, TopBar::exportFile )
+, m_import_button( LoadTexture( "../data/textures/ImportIcon.png" ), Vector2( 22.5f, 22.5f ), LAYOUT::TOPBAR::IMPORT_POS, LAYOUT::TOPBAR::IMPORT_SIZE, TopBar::importFile )
+, m_export_button( LoadTexture( "../data/textures/ExportIcon.png" ), Vector2( 22.5f, 22.5f ), LAYOUT::TOPBAR::EXPORT_POS, LAYOUT::TOPBAR::EXPORT_SIZE, TopBar::exportFile )
 , m_search_input( LAYOUT::TOPBAR::SEARCH_POS, LAYOUT::TOPBAR::SEARCH_SIZE )
 {
 }
