@@ -4,25 +4,22 @@
 
 class UIElement
 {
-
 public:
 
-	UIElement( void ) = default;
-	UIElement( Vector2& _cursor_position, Vector2 _size );
+	UIElement( const Vector2& _position, const Vector2& _size )
+	: m_position( _position )
+	, m_size( _size )
+	{}
 
-	void draw( void );
+	virtual void update     ( const float _tick ) = 0;
+	virtual void draw       ( void )              = 0;
 
-	virtual void drawInner( Vector2 _cursor_position ) = 0;
-
-	const Vector2& getPosition() const { return m_position; }
-	const Vector2& getSize()     const { return m_size; }
+	auto getPosition( void ) const { return m_position; }
+	auto getSize    ( void ) const { return m_size; }
 
 protected:
 
 	Vector2 m_position;
 	Vector2 m_size;
-	Vector2 m_inner_size;
-	float   m_roundness        = 20.f;
-	bool    m_use_inner_margin = true;
-	bool    m_if_focused       = false;
+
 };
