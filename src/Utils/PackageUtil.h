@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <vector>
 
 namespace PackageUtil
 {
@@ -13,13 +14,18 @@ namespace PackageUtil
 
 	struct PackageData
 	{
-		void*    json_data;
-		uint32_t json_data_size;
-		void*    tga_data;
-		uint32_t tga_data_size;
-		void*    ogg_data;
-		uint32_t ogg_data_size;
+		void*    data;
+		uint32_t size;
 	};
 
-	extern void exportPackage( PackageHeader _header, PackageData _data );
+	struct Package
+	{
+		PackageHeader header;
+		std::vector< PackageData > json;
+		std::vector< PackageData > tga;
+		std::vector< PackageData > ogg;
+	};
+
+	extern void exportPackage( Package _package );
+	extern auto importPackage( const std::string& _path ) -> Package;
 }
