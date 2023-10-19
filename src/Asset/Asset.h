@@ -26,13 +26,14 @@ public:
 		std::string data;
 	};
 
-	const auto& getHash    ( void ) const { return m_hash; }
-	const auto& getName    ( void ) const { return m_name; }
-	const auto& getType    ( void ) const { return m_type; }
-	const auto& getIcon    ( void ) const { return m_texture; }
-	const auto& getMetaData( void ) const { return m_meta_data; }
-	const auto& getData    ( void ) const { return m_data; }
-	const auto& getDataSize( void ) const { return m_data_size; }
+	const auto& getHash     ( void ) const { return m_hash; }
+	const auto& getName     ( void ) const { return m_name; }
+	const auto& getType     ( void ) const { return m_type; }
+	const auto& getIcon     ( void ) const { return m_texture; }
+	const auto& getMetaData ( void ) const { return m_meta_data; }
+	const auto& getData     ( void ) const { return m_data; }
+	const auto& getDataSize ( void ) const { return m_data_size; }
+	const auto getExtension( void ) const { return m_path.extension().string(); }
 
 	friend void to_json( nlohmann::json& j, const Asset& v )
 	{

@@ -1,8 +1,11 @@
 #include "TopBar.h"
 
 #include "Manager/AssetManager.h"
+#include "Manager/NotificationManager.h"
 #include "UI/Layout.h"
 #include "UI/Style.h"
+#include "Util/FileUtil.h"
+#include "Util/StringUtil.h"
 
 TopBar::TopBar( void )
 : UIElement( Vector2( 0.f, 0.f ), Vector2( 0.f, 0.f ) )
@@ -35,18 +38,39 @@ void TopBar::packageAssets( void )
 
 void TopBar::importFile( void )
 {
-	//open dialog
+	AssetManager asset_manager;
+	auto paths = FileUtil::openFileDialog();
+	for( auto& path : paths )
+		asset_manager.importFile( path.string() );
+
 }
 
 void TopBar::exportFile( void )
 {
 	AssetManager asset_manager;
-	if( asset_manager.getAssetSelection().size() > 1 )
+	auto         selection = asset_manager.getAssetSelection();
+	if( selection.size() == 1 )
 	{
-		// open dialog for folders
+		auto asset = asset_manager.getAsset( *selection.begin() );
+		auto path = FileUtil::saveFileDialog( asset->getType() );
+		const auto file_handle = FileUtil::open( path.string(), FileUtil::flags::WRITE_ONLY | FileUtil::flags::CREATE | FileUtil::flags::BINARY | FileUtil::flags::TRUNCATE, FileUtil::permissions::WRITE );
+		FileUtil::write( file_handle, asset->getData(), asset->getDataSize() );
+		FileUtil::close( file_handle );
+	}
+	else if( selection.size() > 1 )
+	{
+		auto path = FileUtil::saveFolderDialog();
+		for( auto& asset_hash : selection )
+		{
+			auto asset = asset_manager.getAsset( asset_hash );
+			auto local_path = path / StringUtil::format( "%s%s", asset->getName().c_str(), asset->getExtension().c_str() );
+			const auto file_handle = FileUtil::open( local_path.string(), FileUtil::flags::WRITE_ONLY | FileUtil::flags::CREATE | FileUtil::flags::BINARY | FileUtil::flags::TRUNCATE, FileUtil::permissions::WRITE );
+			FileUtil::write( file_handle, asset->getData(), asset->getDataSize() );
+			FileUtil::close( file_handle );
+		}
 	}
 	else
 	{
-		// open dialog for files
+		NotificationManager::addNotification( { "No asset selected to export" } );
 	}
 }
