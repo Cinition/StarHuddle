@@ -28,7 +28,6 @@ namespace PackageUtil
 		std::vector< PackageData > ogg;
 	};
 
-	extern void exportPackage( Package _package, const std::string& _path );
-	extern auto importPackage( const std::string& _path ) -> Package;
-	extern auto serializePackage( Package _package ) -> uint8_t*;
+	extern void exportPackage( const Package& _package, const std::string& _path );
+	extern auto serializePackage( const Package& _package ) -> uint8_t*;
 }

@@ -13,14 +13,16 @@ namespace FileUtil
 {
 	namespace permissions
 	{
-		constexpr uint32_t READ  = _S_IREAD;
+		constexpr uint32_t READ  = 0222;
 		constexpr uint32_t WRITE = _S_IWRITE;
+		constexpr uint32_t READ_WRITE = READ | WRITE;
 	}
 
 	namespace flags
 	{
 		constexpr uint32_t READ_ONLY  = _O_RDONLY;
 		constexpr uint32_t WRITE_ONLY = _O_WRONLY;
+		constexpr uint32_t READ_WRITE = _O_RDWR;
 		constexpr uint32_t TEMPORARY  = _O_TEMPORARY;
 		constexpr uint32_t APPEND     = _O_APPEND;
 		constexpr uint32_t CREATE     = _O_CREAT;
@@ -29,9 +31,9 @@ namespace FileUtil
 		constexpr uint32_t BINARY     = _O_BINARY;
 	}
 
-	auto open( const std::string& _path, const uint32_t _flags, const uint32_t _mode ) -> const uint32_t;
+	auto open( const std::string& _path, const uint32_t _flags, const uint32_t _mode ) -> const int32_t;
 	auto read( const uint32_t _file_handle, void* _data, const uint32_t _data_size ) -> const uint32_t;
-	auto write( const uint32_t _file_handle, void* _data, const uint32_t _data_size ) -> const uint32_t;
+	auto write( const uint32_t _file_handle, const void* _data, const uint32_t _data_size ) -> const uint32_t;
 	auto seek( const uint32_t _file_handle, uint32_t _offset, uint32_t _origin ) -> const uint32_t;
 	void close( const uint32_t _file_handle );
 

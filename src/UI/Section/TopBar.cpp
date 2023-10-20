@@ -71,9 +71,9 @@ void TopBar::packageAssets( void )
 	package.header.package_size = package_size;
 
 	COMDLG_FILTERSPEC filter_spec{};
-	filter_spec.pszName = L"ZST";
-	filter_spec.pszSpec = L"*.zst";
-	LPCWSTR extension   = { L"zst" };
+	filter_spec.pszName = L"Starhuddle Asset Package";
+	filter_spec.pszSpec = L"*.shp";
+	LPCWSTR extension   = { L"shp" };
 
 	auto path = FileUtil::saveFileDialog( filter_spec, extension );
 

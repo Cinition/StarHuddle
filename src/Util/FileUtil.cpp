@@ -5,7 +5,7 @@
 #include <shobjidl.h>
 #include <codecvt>
 
-auto FileUtil::open( const std::string& _path, const uint32_t _flags, const uint32_t _mode ) -> const uint32_t
+auto FileUtil::open( const std::string& _path, const uint32_t _flags, const uint32_t _mode ) -> const int32_t
 {
 	return _open( _path.c_str(), _flags, _mode );
 }
@@ -15,9 +15,9 @@ auto FileUtil::read( const uint32_t _file_handle, void* _data, const uint32_t _d
 	return _read( _file_handle, _data, _data_size );
 }
 
-auto FileUtil::write( const uint32_t _file_handle, void* _data, const uint32_t _data_size ) -> const uint32_t
+auto FileUtil::write( const uint32_t _file_handle, const void* _data, const uint32_t _data_size ) -> const uint32_t
 {
-	return _write( _file_handle, _data, _data_size );
+	return _write( _file_handle, _data, static_cast< unsigned int >( _data_size ) );
 }
 
 auto FileUtil::seek( const uint32_t _file_handle, uint32_t _offset, uint32_t _origin ) -> const uint32_t
