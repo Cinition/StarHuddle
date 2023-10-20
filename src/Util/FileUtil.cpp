@@ -20,6 +20,11 @@ auto FileUtil::write( const uint32_t _file_handle, void* _data, const uint32_t _
 	return _write( _file_handle, _data, _data_size );
 }
 
+auto FileUtil::seek( const uint32_t _file_handle, uint32_t _offset, uint32_t _origin ) -> const uint32_t
+{
+	return _lseek( _file_handle, _offset, _origin );
+}
+
 void FileUtil::close( const uint32_t _file_handle )
 {
 	_close( _file_handle );
@@ -92,7 +97,7 @@ auto FileUtil::openFileDialog( void ) -> std::vector< std::filesystem::path >
 	return paths;
 }
 
-auto FileUtil::saveFileDialog( Asset::Type _type ) -> std::filesystem::path
+auto FileUtil::saveFileDialog( COMDLG_FILTERSPEC _filter, LPCWSTR _extension ) -> std::filesystem::path
 {
 	std::filesystem::path path;
 
@@ -107,31 +112,8 @@ auto FileUtil::saveFileDialog( Asset::Type _type ) -> std::filesystem::path
 		if( SUCCEEDED( file_dialog->GetOptions( &options ) ) )
 			file_dialog->SetOptions( options );
 
-		COMDLG_FILTERSPEC filter_spec{};
-
-		if( _type == Asset::Type::JSON )
-		{
-			filter_spec.pszName = L"JavaScript Object Notation";
-			filter_spec.pszSpec = L"*.json";
-
-			file_dialog->SetDefaultExtension( L"json" );
-		}
-		else if( _type == Asset::Type::TGA )
-		{
-			filter_spec.pszName = L"Targa Graphics";
-			filter_spec.pszSpec = L"*.tga";
-
-			file_dialog->SetDefaultExtension( L"tga" );
-		}
-		else if( _type == Asset::Type::OGG )
-		{
-			filter_spec.pszName = L"OGG";
-			filter_spec.pszSpec = L"*.ogg";
-
-			file_dialog->SetDefaultExtension( L"ogg" );
-		}
-
-		file_dialog->SetFileTypes( 1, &filter_spec );
+		file_dialog->SetFileTypes( 1, &_filter );
+		file_dialog->SetDefaultExtension( _extension );
 
 		if( SUCCEEDED( file_dialog->Show( NULL ) ) )
 		{

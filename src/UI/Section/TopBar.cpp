@@ -6,6 +6,9 @@
 #include "UI/Style.h"
 #include "Util/FileUtil.h"
 #include "Util/StringUtil.h"
+#include "Util/PackageUtil.h"
+
+#include <shtypes.h>
 
 TopBar::TopBar( void )
 : UIElement( Vector2( 0.f, 0.f ), Vector2( 0.f, 0.f ) )
@@ -34,6 +37,47 @@ void TopBar::draw( void )
 
 void TopBar::packageAssets( void )
 {
+	AssetManager         asset_manager;
+	PackageUtil::Package package;
+
+	int json_count   = 0;
+	int tga_count    = 0;
+	int ogg_count    = 0;
+	int package_size = 0;
+
+	for( auto& asset : asset_manager.getAssets() )
+	{
+		if( asset->getType() == Asset::Type::JSON )
+		{
+			package.json.push_back( { asset->getData(), asset->getDataSize() } );
+			json_count += 1;
+		}
+		else if( asset->getType() == Asset::Type::TGA )
+		{
+			package.tga.push_back( { asset->getData(), asset->getDataSize() } );
+			tga_count += 1;
+		}
+		else if( asset->getType() == Asset::Type::OGG )
+		{
+			package.ogg.push_back( { asset->getData(), asset->getDataSize() } );
+			ogg_count += 1;
+		}	
+		package_size += asset->getDataSize();
+	}
+
+	package.header.json_count   = json_count;
+	package.header.tga_count    = tga_count;
+	package.header.ogg_count    = ogg_count;
+	package.header.package_size = package_size;
+
+	COMDLG_FILTERSPEC filter_spec{};
+	filter_spec.pszName = L"ZST";
+	filter_spec.pszSpec = L"*.zst";
+	LPCWSTR extension   = { L"zst" };
+
+	auto path = FileUtil::saveFileDialog( filter_spec, extension );
+
+	PackageUtil::exportPackage( package, path.string() );
 }
 
 void TopBar::importFile( void )
@@ -42,7 +86,6 @@ void TopBar::importFile( void )
 	auto paths = FileUtil::openFileDialog();
 	for( auto& path : paths )
 		asset_manager.importFile( path.string() );
-
 }
 
 void TopBar::exportFile( void )
@@ -52,7 +95,29 @@ void TopBar::exportFile( void )
 	if( selection.size() == 1 )
 	{
 		auto asset = asset_manager.getAsset( *selection.begin() );
-		auto path = FileUtil::saveFileDialog( asset->getType() );
+
+		COMDLG_FILTERSPEC filter_spec{};
+		LPCWSTR           extension{};
+		if( asset->getType() == Asset::Type::JSON )
+		{
+			filter_spec.pszName = L"JavaScript Object Notation";
+			filter_spec.pszSpec = L"*.json";
+			extension           = L"json";
+		}
+		else if( asset->getType() == Asset::Type::TGA )
+		{
+			filter_spec.pszName = L"Truevision Graphics";
+			filter_spec.pszSpec = L"*.tga";
+			extension           = L"tga";
+		}
+		else if( asset->getType() == Asset::Type::OGG )
+		{
+			filter_spec.pszName = L"OGG";
+			filter_spec.pszSpec = L"*.ogg";
+			extension           = L"ogg";
+		}
+
+		auto path = FileUtil::saveFileDialog( filter_spec, extension );
 		const auto file_handle = FileUtil::open( path.string(), FileUtil::flags::WRITE_ONLY | FileUtil::flags::CREATE | FileUtil::flags::BINARY | FileUtil::flags::TRUNCATE, FileUtil::permissions::WRITE );
 		FileUtil::write( file_handle, asset->getData(), asset->getDataSize() );
 		FileUtil::close( file_handle );

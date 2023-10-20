@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <vector>
 #include <filesystem>
+#include <shtypes.h>
 
 namespace FileUtil
 {
@@ -30,9 +31,10 @@ namespace FileUtil
 	auto open( const std::string& _path, const uint32_t _flags, const uint32_t _mode ) -> const uint32_t;
 	auto read( const uint32_t _file_handle, void* _data, const uint32_t _data_size ) -> const uint32_t;
 	auto write( const uint32_t _file_handle, void* _data, const uint32_t _data_size ) -> const uint32_t;
+	auto seek( const uint32_t _file_handle, uint32_t _offset, uint32_t _origin ) -> const uint32_t;
 	void close( const uint32_t _file_handle );
 
 	auto openFileDialog( void ) -> std::vector< std::filesystem::path >;
-	auto saveFileDialog( Asset::Type _type ) -> std::filesystem::path;
+	auto saveFileDialog( COMDLG_FILTERSPEC _filter, LPCWSTR _extension ) -> std::filesystem::path;
 	auto saveFolderDialog() -> std::filesystem::path;
 }
