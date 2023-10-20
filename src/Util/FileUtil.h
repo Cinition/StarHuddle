@@ -21,6 +21,7 @@ namespace FileUtil
 	{
 		constexpr uint32_t READ_ONLY  = _O_RDONLY;
 		constexpr uint32_t WRITE_ONLY = _O_WRONLY;
+		constexpr uint32_t TEMPORARY  = _O_TEMPORARY;
 		constexpr uint32_t APPEND     = _O_APPEND;
 		constexpr uint32_t CREATE     = _O_CREAT;
 		constexpr uint32_t TRUNCATE   = _O_TRUNC;

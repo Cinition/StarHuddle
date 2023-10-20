@@ -4,11 +4,11 @@
 #include "Asset/TGAAsset.h"
 #include "Asset/OGGAsset.h"
 #include "Util/StringUtil.h"
+#include "Util/PackageUtil.h"
 #include "Manager/NotificationManager.h"
 
-#include "raylib.h"
-#include "json.hpp"
-#include "zstd.h"
+#include <raylib.h>
+#include <json.hpp>
 
 #include <io.h>
 #include <direct.h>
@@ -29,9 +29,7 @@ void AssetManager::importFile( const std::string& _path )
 	auto                  millisec_since_epoch = duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now().time_since_epoch() ).count();
 	auto                  file_hash            = std::hash< uint64_t >{}( millisec_since_epoch * ( *payload.data ) * m_next_offset++ );
 
-	if( file_path.extension().string() == std::string( ".shp" ) )
-		unpackageAssets( payload.data, payload.data_size );
-	else if( file_path.extension().string() == std::string( ".json" ) )
+	if( file_path.extension().string() == std::string( ".json" ) )
 		m_assets.push_back( std::make_shared< JSONAsset >( file_hash, file_path, payload.data, payload.data_size ) );
 	else if( file_path.extension().string() == std::string( ".tga" ) )
 		m_assets.push_back( std::make_shared< TGAAsset >( file_hash, file_path, payload.data, payload.data_size ) );
@@ -59,48 +57,6 @@ void AssetManager::exportAsset( size_t _hash, const std::string& _path )
 		file_path += ".ogg";
 
 	saveFile( file_path, asset->getData(), asset->getDataSize() );
-}
-
-void AssetManager::unpackageAssets( void* _data, uint32_t _data_size )
-{
-	size_t decomp_size       = ZSTD_getFrameContentSize( _data, _data_size );
-	void*  decomp_package    = malloc( decomp_size );
-	auto   compress_result   = ZSTD_decompress( decomp_package, decomp_size, _data, _data_size );
-	if( ZSTD_isError( compress_result ) )
-	{
-		NotificationManager::addNotification( { StringUtil::format( "Something went wrong with decompression: %s", ZSTD_getErrorName( compress_result ) ) } );
-		return;
-	}
-
-	auto data       = static_cast< uint8_t* >( decomp_package );
-	auto data_array = std::vector( &data[ 0 ], &data[ decomp_size ] );
-
-	auto json = nlohmann::json( data_array );
-}
-
-void AssetManager::packageAssets( const std::string& _path )
-{
-	nlohmann::json package{};
-
-	for( auto asset : m_assets )
-		package.push_back( *asset.get() );
-
-	/*
-	size_t comp_size       = ZSTD_compressBound( package.dump().capacity() );
-	void*  comp_package    = malloc( comp_size );
-
-	auto compress_result = ZSTD_compress( comp_package, comp_size, &package, sizeof( package ), 1 );
-	if( ZSTD_isError( compress_result ) )
-	{
-		NotificationManager::addNotification( { StringHelper::format( "Something went wrong with compression: %s", ZSTD_getErrorName( compress_result ) ) } );
-		return;
-	}
-	*/
-
-	auto package_dump = package.dump();
-	auto package_size = sizeof( char ) * static_cast< int >( package_dump.size() );
-
-	saveFile( _path, package_dump.c_str(), package_size );
 }
 
 std::shared_ptr< Asset > AssetManager::getAsset( size_t _hash )

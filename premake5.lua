@@ -6,6 +6,7 @@ warnings      "Extra"
 defines {
     "_CRT_SECURE_NO_WARNINGS",
     "_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING",
+    "WORKING_DIRECTORY=" .. "\"" .. os.getcwd() .. "\""
 }
 
 filter "configurations:Debug"
@@ -32,6 +33,8 @@ workspace "StarHuddle"
         location ( "build" )
         targetdir( "lib" )
 
+        warnings "Off"
+
         files {
             "dependencies/raylib/src/rcore.c",
             "dependencies/raylib/src/utils.c",
@@ -53,10 +56,12 @@ workspace "StarHuddle"
         }
 
 
-    project "ZStd"
+    project "Zstd"
         kind "StaticLib"
         location ( "build" )
         targetdir( "lib" )
+
+        warnings "Off"
 
         files {
             "dependencies/zstd/lib/zstd.h",
@@ -69,7 +74,9 @@ workspace "StarHuddle"
         }
 
         includedirs {
-            "dependencies/zstd/lib/common/",
+            "dependencies/zstd/lib/common",
+            "dependencies/zstd/lib/compress",
+            "dependencies/zstd/lib/decompress",
         }
 
 
@@ -93,7 +100,7 @@ workspace "StarHuddle"
             "opengl32",
             "gdi32",
             "winmm",
-            "ZStd",
+            "Zstd",
         }
 
         includedirs {
@@ -102,5 +109,6 @@ workspace "StarHuddle"
             "dependencies/json/single_include/nlohmann",
             -- RayLib
             "dependencies/raylib/src",
+            -- Zstd
             "dependencies/zstd/lib",
         }

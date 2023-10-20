@@ -11,6 +11,7 @@ namespace PackageUtil
 		uint32_t json_count;
 		uint32_t tga_count;
 		uint32_t ogg_count;
+		uint32_t package_size;
 	};
 
 	struct PackageData
@@ -27,6 +28,7 @@ namespace PackageUtil
 		std::vector< PackageData > ogg;
 	};
 
-	extern void exportPackage( Package _package );
+	extern void exportPackage( Package _package, const std::string& _path );
 	extern auto importPackage( const std::string& _path ) -> Package;
+	extern auto serializePackage( Package _package ) -> uint8_t*;
 }
