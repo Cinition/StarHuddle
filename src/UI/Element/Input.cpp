@@ -3,6 +3,7 @@
 #include "UI/Style.h"
 #include "Util/UIUtil.h"
 #include "Util/InputUtil.h"
+#include "Manager/FilterManager.h"
 
 Input::Input( const Vector2& _position, const Vector2& _size )
 : UIElement( _position, _size )
@@ -18,6 +19,8 @@ void Input::update( const float /*_tick*/ )
 
 	if( !m_focused )
 		return;
+
+	FilterManager::setNameFilter( m_input_text );
 
 	if( handleSpecialInput() )
 		return;

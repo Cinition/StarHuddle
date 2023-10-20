@@ -18,3 +18,8 @@ std::string StringUtil::format( const char* _string, ... )
 	return string;
 
 } // format
+
+bool StringUtil::contains( const std::string& _string, const std::string& _contains )
+{
+	return ( _string.find( _contains ) != std::string::npos );
+}
