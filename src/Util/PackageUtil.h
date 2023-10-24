@@ -12,6 +12,7 @@ namespace PackageUtil
 		uint32_t tga_count;
 		uint32_t ogg_count;
 		uint32_t package_size;
+		uint32_t compressed_size;
 	};
 
 	struct PackageData
@@ -28,6 +29,6 @@ namespace PackageUtil
 		std::vector< PackageData > ogg;
 	};
 
-	extern void exportPackage( const Package& _package, const std::string& _path );
+	extern void exportPackage( Package& _package, const std::string& _path );
 	extern auto serializePackage( const Package& _package ) -> uint8_t*;
 }
