@@ -12,7 +12,6 @@
 
 #include <io.h>
 #include <direct.h>
-#include <ctime>
 #include <functional>
 #include <algorithm>
 
@@ -25,23 +24,36 @@ void AssetManager::importFile( const std::string& _path )
 		return;
 	}
 
-	std::filesystem::path file_path            = _path;
-	auto                  millisec_since_epoch = duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now().time_since_epoch() ).count();
-	auto                  file_hash            = std::hash< uint64_t >{}( millisec_since_epoch * ( *payload.data ) * m_next_offset++ );
+	auto path      = std::filesystem::path( _path );
+	auto name      = path.filename().string();
+	auto extension = path.extension().string();
 
-	if( file_path.extension().string() == std::string( ".json" ) )
-		m_assets.push_back( std::make_shared< JSONAsset >( file_hash, file_path, payload.data, payload.data_size ) );
-	else if( file_path.extension().string() == std::string( ".tga" ) )
-		m_assets.push_back( std::make_shared< TGAAsset >( file_hash, file_path, payload.data, payload.data_size ) );
-	else if( file_path.extension().string() == std::string( ".ogg" ) )
-		m_assets.push_back( std::make_shared< OGGAsset >( file_hash, file_path, payload.data, payload.data_size ) );
+	if( extension == std::string( ".shp" ) )
+		PackageUtil::importPackage( _path );
+	else if( extension == std::string( ".json" ) )
+		m_assets.emplace( m_next_id, std::make_shared< JSONAsset >( m_next_id++, name, extension, payload.data, payload.data_size ) );
+	else if( extension == std::string( ".tga" ) )
+		m_assets.emplace( m_next_id, std::make_shared< TGAAsset >( m_next_id++, name, extension, payload.data, payload.data_size ) );
+	else if( extension == std::string( ".ogg" ) )
+		m_assets.emplace( m_next_id, std::make_shared< OGGAsset >( m_next_id++, name, extension, payload.data, payload.data_size ) );
 	else
 		NotificationManager::addNotification( { "You are trying to insert a file that is not supported!" } );
 }
 
-void AssetManager::exportAsset( size_t _hash, const std::string& _path )
+void AssetManager::importAsset( const PackageUtil::PackageData& _package_data, const Asset::Type& _type )
 {
-	auto asset = getAsset( _hash );
+	switch( _type )
+	{
+		case Asset::Type::JSON: m_assets.emplace( m_next_id, std::make_shared< JSONAsset >( m_next_id++, _package_data.name, ".json", static_cast< uint8_t* >( _package_data.data ), _package_data.size ) ); break;
+		case Asset::Type::TGA:  m_assets.emplace( m_next_id, std::make_shared< TGAAsset >( m_next_id++, _package_data.name, ".tga", static_cast< uint8_t* >( _package_data.data ), _package_data.size ) ); break;
+		case Asset::Type::OGG:  m_assets.emplace( m_next_id, std::make_shared< OGGAsset >( m_next_id++, _package_data.name, ".ogg", static_cast< uint8_t* >( _package_data.data ), _package_data.size ) ); break;
+		default: NotificationManager::addNotification( { "You are trying to insert a file that is not supported!" } ); break;
+	}
+}
+
+void AssetManager::exportAsset( uint32_t _id, const std::string& _path )
+{
+	auto asset = getAsset( _id );
 	if( !asset )
 	{
 		NotificationManager::addNotification( { "You are trying to export an asset that is unavailable." } );
@@ -59,31 +71,26 @@ void AssetManager::exportAsset( size_t _hash, const std::string& _path )
 	saveFile( file_path, asset->getData(), asset->getDataSize() );
 }
 
-std::shared_ptr< Asset > AssetManager::getAsset( size_t _hash )
+std::shared_ptr< Asset > AssetManager::getAsset( uint32_t _id )
 {
-	auto asset_it = std::find_if( m_assets.begin(), m_assets.end(),
-		[ _hash ]( std::shared_ptr< Asset > _asset )
-		{
-			return ( _asset->getHash() == _hash );
-		} );
-
+	auto asset_it = m_assets.find( _id );
 	if( asset_it != m_assets.end() )
-		return *asset_it;
+		return asset_it->second;
 
 	return nullptr;
 }
 
-void AssetManager::addSelection( size_t _hash )
+void AssetManager::addSelection( uint32_t _id )
 {
 	if( !IsKeyDown( KEY_LEFT_CONTROL ) )
 		m_selected_assets.clear();
 
-	m_selected_assets.push_back( _hash );
+	m_selected_assets.push_back( _id );
 }
 
-void AssetManager::removeSelection( size_t _hash )
+void AssetManager::removeSelection( uint32_t _id )
 {
-	auto selection_it = std::find_if( m_selected_assets.begin(), m_selected_assets.end(), [ _hash ]( size_t hash_value ){ return hash_value == _hash; } );
+	auto selection_it = std::find_if( m_selected_assets.begin(), m_selected_assets.end(), [ _id ]( size_t hash_value ){ return hash_value == _id; } );
 	if( selection_it != m_selected_assets.end() )
 	{
 		m_selected_assets.erase( selection_it );
@@ -95,7 +102,7 @@ bool AssetManager::hasAssetsUpdated( void )
 {
 	size_t checksum{};
 	for( auto asset : m_assets )
-		checksum ^= std::hash< std::shared_ptr< Asset > >{}( asset );
+		checksum ^= std::hash< std::shared_ptr< Asset > >{}( asset.second );
 
 	if( checksum != m_checksum_hash )
 	{

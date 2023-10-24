@@ -7,7 +7,7 @@ class TGAAsset : public Asset
 
 public:
 
-	TGAAsset( size_t _hash, const std::filesystem::path& _path, uint8_t* _data, uint32_t _data_size );
+	TGAAsset( uint32_t _id, const std::string& _name, const std::string& _extension, uint8_t* _data, uint32_t _data_size );
 
 protected:
 

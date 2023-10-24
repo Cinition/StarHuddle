@@ -79,8 +79,8 @@ void AssetDetail::draw( void )
 void AssetDetail::drawAssetDetail( void )
 {
 	AssetManager asset_manager;
-	auto         asset_hash = *asset_manager.getAssetSelection().begin();
-	auto         asset      = asset_manager.getAsset( asset_hash );
+	auto         id    = *asset_manager.getAssetSelection().begin();
+	auto         asset = asset_manager.getAsset( id );
 	if( !asset )
 		return;
 

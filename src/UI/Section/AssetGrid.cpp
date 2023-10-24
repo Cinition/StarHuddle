@@ -74,7 +74,7 @@ void AssetGrid::updateAssetGrid( const float _tick )
 				cursor_position.y += m_frame_size.y + UI::MARGIN;
 			}
 
-			m_asset_frames.push_back( { cursor_position, m_frame_size, asset } );
+			m_asset_frames.push_back( { cursor_position, m_frame_size, asset.second } );
 			cursor_position.x += m_frame_size.x + UI::MARGIN;
 			asset_index += 1;
 		}

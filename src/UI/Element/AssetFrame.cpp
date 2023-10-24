@@ -31,14 +31,14 @@ void AssetFrame::update( const float /*_tick*/ )
 
 	Vector2 absolution_position = Vector2Add( m_position, Vector2( LAYOUT::ASSETGRID_POS ) );
 	if( InputUtil::isMouseInside( Vector2Add( absolution_position, Vector2( 0.f, m_row_offset + m_scroll_offset ) ), Vector2Add( absolution_position, Vector2Add( m_size, Vector2( 0.f, m_row_offset + m_scroll_offset ) ) ) ) && IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
-		AssetManager::addSelection( locked_asset->getHash() );
+		AssetManager::addSelection( locked_asset->getId() );
 
 	auto selection_vector = AssetManager::getAssetSelection();
 	auto selection_it     = std::find_if(
         selection_vector.begin(), selection_vector.end(),
         [ locked_asset ]( size_t _selection_hash )
         {
-            return ( _selection_hash == locked_asset->getHash() );
+            return ( _selection_hash == locked_asset->getId() );
         } );
 
 	m_selected = ( selection_it != selection_vector.end() );

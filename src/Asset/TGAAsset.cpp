@@ -4,13 +4,13 @@
 
 #include <filesystem>
 
-TGAAsset::TGAAsset( size_t _hash, const std::filesystem::path& _path, uint8_t* _data, uint32_t _data_size )
+TGAAsset::TGAAsset( uint32_t _id, const std::string& _name, const std::string& _extension, uint8_t* _data, uint32_t _data_size )
 {
-	m_hash      = _hash;
-	m_name      = _path.stem().string();
+	m_id        = _id;
+	m_name      = _name;
+	m_extension = _extension;
 	m_type      = Asset::Type::TGA;
 	m_texture   = LoadTexture( "../data/textures/TGA.png" );
-	m_path      = _path;
 	m_data      = _data;
 	m_data_size = _data_size;
 

@@ -17,8 +17,9 @@ namespace PackageUtil
 
 	struct PackageData
 	{
-		void*    data;
-		uint32_t size;
+		void*       data;
+		uint32_t    size;
+		std::string name;
 	};
 
 	struct Package
@@ -30,5 +31,5 @@ namespace PackageUtil
 	};
 
 	extern void exportPackage( Package& _package, const std::string& _path );
-	extern auto serializePackage( const Package& _package ) -> uint8_t*;
+	extern void importPackage( const std::string& _path );
 }

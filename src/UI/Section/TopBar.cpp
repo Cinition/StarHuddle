@@ -47,22 +47,23 @@ void TopBar::packageAssets( void )
 
 	for( auto& asset : asset_manager.getAssets() )
 	{
-		if( asset->getType() == Asset::Type::JSON )
+		auto& asset_value = asset.second;
+		if( asset_value->getType() == Asset::Type::JSON )
 		{
-			package.json.push_back( { asset->getData(), asset->getDataSize() } );
+			package.json.push_back( { asset_value->getData(), asset_value->getDataSize(), asset_value->getName() } );
 			json_count += 1;
 		}
-		else if( asset->getType() == Asset::Type::TGA )
+		else if( asset_value->getType() == Asset::Type::TGA )
 		{
-			package.tga.push_back( { asset->getData(), asset->getDataSize() } );
+			package.tga.push_back( { asset_value->getData(), asset_value->getDataSize(), asset_value->getName() } );
 			tga_count += 1;
 		}
-		else if( asset->getType() == Asset::Type::OGG )
+		else if( asset_value->getType() == Asset::Type::OGG )
 		{
-			package.ogg.push_back( { asset->getData(), asset->getDataSize() } );
+			package.ogg.push_back( { asset_value->getData(), asset_value->getDataSize(), asset_value->getName() } );
 			ogg_count += 1;
 		}	
-		package_size += asset->getDataSize();
+		package_size += asset_value->getDataSize();
 	}
 
 	package.header.json_count   = json_count;
@@ -125,9 +126,9 @@ void TopBar::exportFile( void )
 	else if( selection.size() > 1 )
 	{
 		auto path = FileUtil::saveFolderDialog();
-		for( auto& asset_hash : selection )
+		for( auto& id : selection )
 		{
-			auto asset = asset_manager.getAsset( asset_hash );
+			auto asset = asset_manager.getAsset( id );
 			auto local_path = path / StringUtil::format( "%s%s", asset->getName().c_str(), asset->getExtension().c_str() );
 			const auto file_handle = FileUtil::open( local_path.string(), FileUtil::flags::WRITE_ONLY | FileUtil::flags::CREATE | FileUtil::flags::BINARY | FileUtil::flags::TRUNCATE, FileUtil::permissions::WRITE );
 			FileUtil::write( file_handle, asset->getData(), asset->getDataSize() );

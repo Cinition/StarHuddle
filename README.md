@@ -1,14 +1,15 @@
 # StarHuddle
-Starhuddle is an asset manager that packages your assets into a singular packaged file.
+StarHuddle is an asset manager that packages your assets into a singular packaged file.
 
 # Links
 - [ Usage ]( #usage )
 - [ Build ]( #build )
 - [ Libraries ]( #libraries )
 - [ Overview ]( #overview )
+- [ ToDo ]( #todo )
 
 # Usage
-Just simply launch the application through the .exe. Be vigilant with closing as Starhuddle doens't save current assets importing into it ATM.
+Just simply launch the application through the .exe. Be vigilant with closing as StarHuddle doens't save current assets importing into it ATM.
 
 ## Importing
 Importing is done easily by just draging a file into the application, that includes multiple files aswell.
@@ -24,7 +25,7 @@ When pressing the package button it'll prompt on the location to save the compre
 
 # Build
 
-Starhuddle makes use of Premake for its project building. To build the project you just simply write `premake.exe vs2022` to build it for Visual Studio 2022.
+StarHuddle makes use of Premake for its project building. To build the project you just simply write `premake.exe vs2022` to build it for Visual Studio 2022.
 
 Go to [this link](https://premake.github.io/docs/Using-Premake) more information on how to build to other platforms
 
@@ -55,3 +56,58 @@ Everything went well and according to my planning, i was meeting my daily deadli
 I've done some file manipulation for windows before, but that was with an outdated library and thus very different from what i used in this project.
 
 But the compression is something i need to get a better grasp of. As there isn't that much documentation out there for them, you need to delve into it's depths. Which excites me but also let's me down as i didn't grasp this knowledge during these 2 weeks.
+
+# ToDo
+
+While the basic functionality for an asset manager is there, it can be expanded to hold different file formats or even more asset search filters
+
+### File Formats
+
+Adding new file formats to StarHuddle is an easy step.
+
+Mainly you need to add a new class, that inherits and integrates method from the Asset class
+
+Other than that you need the affect a other places to enable full support in the tool.
+
+- PackageUtil.h
+
+In the PackageHeader you need to add onto the Header struct a `uint32_t` counter to hold asset count.
+
+```
+struct PackageHeader
+{
+    uint32_t json_count;
+    uint32_t tga_count;
+    uint32_t ogg_count;
+    uint32_t xxx_count
+    uint32_t package_size;
+    uint32_t compressed_size;
+};
+```
+xxx_count : being your new variable
+
+And the package struct that holds the actuall data of each asset of your new type.
+
+```
+struct Package
+{
+    PackageHeader header;
+    std::vector< PackageData > json;
+    std::vector< PackageData > tga;
+    std::vector< PackageData > ogg;
+    std::vector< PackageData > xxx;
+};
+```
+xxx : being your new variable
+
+- PackageUtil.cpp
+
+
+
+- TopBar.cpp
+
+asd
+
+- AssetManager.cpp
+
+asd
