@@ -36,6 +36,7 @@ void AssetManager::importFile( const std::string& _path )
 		m_assets.emplace( m_next_id, std::make_shared< TGAAsset >( m_next_id++, name, extension, payload.data, payload.data_size ) );
 	else if( extension == std::string( ".ogg" ) )
 		m_assets.emplace( m_next_id, std::make_shared< OGGAsset >( m_next_id++, name, extension, payload.data, payload.data_size ) );
+	// MARKER: "File Importing"
 	else
 		NotificationManager::addNotification( { "You are trying to insert a file that is not supported!" } );
 }
@@ -47,6 +48,7 @@ void AssetManager::importAsset( const PackageUtil::PackageData& _package_data, c
 		case Asset::Type::JSON: m_assets.emplace( m_next_id, std::make_shared< JSONAsset >( m_next_id++, _package_data.name, ".json", static_cast< uint8_t* >( _package_data.data ), _package_data.size ) ); break;
 		case Asset::Type::TGA:  m_assets.emplace( m_next_id, std::make_shared< TGAAsset >( m_next_id++, _package_data.name, ".tga", static_cast< uint8_t* >( _package_data.data ), _package_data.size ) ); break;
 		case Asset::Type::OGG:  m_assets.emplace( m_next_id, std::make_shared< OGGAsset >( m_next_id++, _package_data.name, ".ogg", static_cast< uint8_t* >( _package_data.data ), _package_data.size ) ); break;
+		// MARKER: "Asset Importing"
 		default: NotificationManager::addNotification( { "You are trying to insert a file that is not supported!" } ); break;
 	}
 }
@@ -60,14 +62,7 @@ void AssetManager::exportAsset( uint32_t _id, const std::string& _path )
 		return;
 	}
 
-	std::string file_path = _path + "\\" + asset->getName();
-	if( asset->getType() == Asset::Type::JSON )
-		file_path += ".json";
-	else if( asset->getType() == Asset::Type::TGA )
-		file_path += ".tga";
-	else if( asset->getType() == Asset::Type::OGG )
-		file_path += ".ogg";
-
+	std::string file_path = _path + "\\" + asset->getName() + asset->getExtension();
 	saveFile( file_path, asset->getData(), asset->getDataSize() );
 }
 

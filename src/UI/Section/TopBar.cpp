@@ -40,9 +40,6 @@ void TopBar::packageAssets( void )
 	AssetManager         asset_manager;
 	PackageUtil::Package package;
 
-	int json_count   = 0;
-	int tga_count    = 0;
-	int ogg_count    = 0;
 	int package_size = 0;
 
 	for( auto& asset : asset_manager.getAssets() )
@@ -51,24 +48,23 @@ void TopBar::packageAssets( void )
 		if( asset_value->getType() == Asset::Type::JSON )
 		{
 			package.json.push_back( { asset_value->getData(), asset_value->getDataSize(), asset_value->getName() } );
-			json_count += 1;
+			package.header.json_count += 1;
 		}
 		else if( asset_value->getType() == Asset::Type::TGA )
 		{
 			package.tga.push_back( { asset_value->getData(), asset_value->getDataSize(), asset_value->getName() } );
-			tga_count += 1;
+			package.header.tga_count += 1;
 		}
 		else if( asset_value->getType() == Asset::Type::OGG )
 		{
 			package.ogg.push_back( { asset_value->getData(), asset_value->getDataSize(), asset_value->getName() } );
-			ogg_count += 1;
+			package.header.ogg_count += 1;
 		}	
+		// MARKER: File Format Combination
+
 		package_size += asset_value->getDataSize();
 	}
 
-	package.header.json_count   = json_count;
-	package.header.tga_count    = tga_count;
-	package.header.ogg_count    = ogg_count;
 	package.header.package_size = package_size;
 
 	COMDLG_FILTERSPEC filter_spec{};
@@ -117,6 +113,7 @@ void TopBar::exportFile( void )
 			filter_spec.pszSpec = L"*.ogg";
 			extension           = L"ogg";
 		}
+		// MARKER: File Format Exporting
 
 		auto path = FileUtil::saveFileDialog( filter_spec, extension );
 		const auto file_handle = FileUtil::open( path.string(), FileUtil::flags::WRITE_ONLY | FileUtil::flags::CREATE | FileUtil::flags::BINARY | FileUtil::flags::TRUNCATE, FileUtil::permissions::WRITE );
